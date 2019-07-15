@@ -1,0 +1,12 @@
+/lib
+/bin
+.idea
+.settings
+/classes
+/res
+.classpath
+.project
+_classpath.xml
+_project.xml
+RPGamesEngine 2.0.iml
+Untitled 1
