@@ -73,11 +73,11 @@ public class Door extends Entity{
 			
 		}
 		
-		if((GameState.path+GameState.currentLevel).equalsIgnoreCase(worlds[0])){
+		if(("res/worlds/"+GameState.currentLevel).equalsIgnoreCase(worlds[0])){
 			this.x= x1;
 			this.y=y1;
 		}
-		if((GameState.path+GameState.currentLevel).equalsIgnoreCase(worlds[1])){
+		if(("res/worlds/"+GameState.currentLevel).equalsIgnoreCase(worlds[1])){
 			this.x= x2;
 			this.y=y2;
 		}

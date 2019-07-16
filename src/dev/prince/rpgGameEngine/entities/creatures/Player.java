@@ -16,7 +16,6 @@ import dev.prince.rpgGameEngine.states.GameState;
 
 public class Player extends Creature {
 	
-	
 	protected Texture sheet;
 	private Inventory inventory;
 	private boolean useInventory=false;
@@ -32,6 +31,7 @@ public class Player extends Creature {
 		bounds.setY(38 );
 		bounds.setWidth(17);
 		bounds.setHeight(12);
+		
 		
 		this.username = username;
 		sheet = Assets.playerSheet;
@@ -151,7 +151,7 @@ public class Player extends Creature {
 	public void render() {
 			
 		
-			Renderer.renderString(x-handler.getGameCamera().getxOffset() -Fonts.font.getWidth(username)/2+width/2, y-handler.getGameCamera().getyOffset()-20, username, Color.white, false);
+			Renderer.renderString(x-handler.getGameCamera().getxOffset() -Fonts.font.getWidth(username)/2+width/2, y-handler.getGameCamera().getyOffset()-20, username, Color.black, false);
 			Renderer.setColor(1, 1, 1, 1);
 			Renderer.renderSubImage(sheet,(x-handler.getGameCamera().getxOffset()),(y-handler.getGameCamera().getyOffset()),width,height,getCurrentAnimationFrame(), 1f);
 			
@@ -165,13 +165,8 @@ public class Player extends Creature {
 	
 	//HELPER METHODS//
 	public void getInput(){
-		
-		
 		xMove=0;
 		yMove=0;
-		
-		
-		
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 			direction=0;

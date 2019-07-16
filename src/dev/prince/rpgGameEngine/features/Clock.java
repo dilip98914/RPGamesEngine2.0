@@ -26,8 +26,8 @@ public class Clock {
 		}
 	}
 	
-	public void tick(){
-		count++;
+	public void tick(int counter){
+		count+=counter;
 		if(count>=interval){
 			minutes+=1;
 			if(minutes>maxMinutes){

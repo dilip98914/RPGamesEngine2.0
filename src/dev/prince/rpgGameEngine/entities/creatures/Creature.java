@@ -8,9 +8,9 @@ import dev.prince.rpgGameEngine.tiles.Tile;
 
 public abstract class Creature extends Entity {
 	
-	public static float  DEFAULT_SPEED=1;
+	public static float  DEFAULT_SPEED=1.5f;
 	public static final int DEFAULT_HEALTH=10;
-	public static final float DEFAULT_WIDTH=52,DEFAULT_HEIGHT=56;
+	public static final float DEFAULT_WIDTH=52*1.2f,DEFAULT_HEIGHT=56*1.2f;
 	public static final int DEFAULT_ANIMSPEED=110;
 	
 	protected float speed,runSpeed;
@@ -61,7 +61,9 @@ public abstract class Creature extends Entity {
 	///MOVE CODE/////
 	
 	public void move(){
-		
+//		x+=xMove;
+//		y+=yMove;
+//		
 		
 		if(!getEntityCollision(xMove,0f))
 			moveX();

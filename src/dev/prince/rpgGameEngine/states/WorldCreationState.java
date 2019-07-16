@@ -57,6 +57,8 @@ public class WorldCreationState extends State{
 			 for(int i=0;i<modes.length;i++){
 				 if(modes[i] == null)
 					 return;
+//				 String some=modes[i].getClass().getSimpleName().substring(0, modes[i].getClass().getSimpleName().length()-8);
+//				 System.out.println(some);
 				 if(GameState.prompt.getPromptText().equalsIgnoreCase("/enter "+modes[i].getClass().getSimpleName().substring(0, modes[i].getClass().getSimpleName().length()-8))){
 					 if(KeyManager.value == Keyboard.KEY_RETURN ){
 							Creation.setCreation(modes[i]);

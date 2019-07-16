@@ -117,8 +117,8 @@ public class WorldSave {
 	 */
 	public static void saveDoor(Entity e){
 			try {
-				String text = Utils.loadFileAsString(GameState.root+GameState.currentLocation+"/"+GameState.currentLevel.substring(0, GameState.currentLevel.length()-5)+"entity");
-				FileWriter fw = new FileWriter(new File(GameState.root+GameState.currentLocation+"/"+GameState.currentLevel.substring(0, GameState.currentLevel.length()-5)+"entity"));
+				String text = Utils.loadFileAsString("res/worlds/"+GameState.currentLocation+"/"+GameState.currentLevel.substring(0, GameState.currentLevel.length()-5)+"entity");
+				FileWriter fw = new FileWriter(new File("res/worlds/"+GameState.currentLocation+"/"+GameState.currentLevel.substring(0, GameState.currentLevel.length()-5)+"entity"));
 				fw.append(text);
 				
 				fw.append("Door ");
@@ -128,8 +128,8 @@ public class WorldSave {
 				fw.close();
 				
 				//NEXT FILE
-				String text1 = Utils.loadFileAsString(GameState.root+e.params.get(8)+"/"+e.params.get(9)+".entity");
-				FileWriter fw1 = new FileWriter(new File(GameState.root+e.params.get(8)+"/"+e.params.get(9)+".entity"));
+				String text1 = Utils.loadFileAsString("res/worlds/"+e.params.get(8)+"/"+e.params.get(9)+".entity");
+				FileWriter fw1 = new FileWriter(new File("res/worlds/"+e.params.get(8)+"/"+e.params.get(9)+".entity"));
 				fw1.append(text1);
 				fw1.append("Door ");
 				for(int i=0;i<e.params.size();i++){
@@ -157,7 +157,7 @@ public class WorldSave {
 		for(int a=0;a<15;a++){
 			f.format("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n");
 		}
-			f.format(path.substring(GameState.root.length()+new File(path).getParentFile().getName().length()+1));
+			f.format(path.substring("res/worlds/".length()+new File(path).getParentFile().getName().length()+1));
 			
 		f.close();
 		try {

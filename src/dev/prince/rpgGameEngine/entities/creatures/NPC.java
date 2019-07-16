@@ -220,7 +220,7 @@ public class NPC extends Creature {
 		if(checkIntersect()){
 			if(KeyManager.value==Keyboard.KEY_RETURN){
 				interact=true;
-				GameState.dialogue = name+": "+dialogue;
+//				GameState.dialogue = name+": "+dialogue;
 				GameState.shouldDialogue = !GameState.shouldDialogue;
 				
 				if(handler.getPlayer().direction==0)

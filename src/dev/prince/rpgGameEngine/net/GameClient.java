@@ -94,7 +94,7 @@ public class GameClient extends Thread{
 					}
 				}
 				//handler.getWorld().setWorldPath(GameState.root+GameState.currentLocation+"/"+GameState.currentLevel);
-				handler.getWorld().loadWorld(GameState.root+GameState.currentLocation+"/"+GameState.currentLevel);
+				handler.getWorld().loadWorld("res/worlds/"+GameState.currentLocation+"/"+GameState.currentLevel);
 				
 				break;
 			case BASICLOGIN:

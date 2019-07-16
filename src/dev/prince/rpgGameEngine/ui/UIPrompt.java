@@ -41,7 +41,7 @@ public class UIPrompt extends UIObject{
 		onMouseClick();//check click (focus when clicked)
 		focusPrompt();//focus when "/" pressed
 		
-		handler.getChat().setFocused(focused);
+//		handler.getChat().setFocused(focused);
 		if(focused){
 			
 			

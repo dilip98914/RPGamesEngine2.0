@@ -19,65 +19,48 @@ public class GameState extends State {
 
 	private World world;
 	private WorldCreationState gameCreationState;
-	private Color c = Color.darkGray.darker();
+	private Color DARK_GRAY = Color.darkGray.darker();
 	public static boolean createWorld = false, toMenu = false, save = false,
 			shouldDialogue;
-	
 	public static UIPrompt prompt;
-	public static Chat chat;
-
+//	public static Chat chat;
 	private float fadeValue = 1.0f, fadeMagnitude = 0f;
 
-	public static String[] locations;
-
-	public static String currentLocation, currentLevel, path, root,
-			dialogue = "..";
+	public static String[] locations=Utils.loadFileAsString("res/worlds/saveFile.sav").split("\\s+");
+	public static String currentLocation=locations[0];
+	public static String currentLevel=locations[1];
+	public static String worldPath="res/worlds/"+ currentLocation + "/";
 	private Clock clock;
 
-	public Item flint;
-
+	int promptLocX=20;
+	int promptLocY=handler.getHeight() - 40;
+	
+	
 	public GameState(Handler handler) {
 		super(handler);
-
-		locations = Utils.loadFileAsString("res/worlds/saveFile.sav").split(
-				"\\s+");
-
-		currentLocation = locations[0];
-		currentLevel = locations[1];
-
-		root = "res/worlds/";
-		path = root + currentLocation + "/";
-
-		world = new World(handler, path + currentLevel);
+		clock = new Clock(handler);
+		world = new World(handler,worldPath+ currentLevel);
 		handler.setWorld(world);
 		gameCreationState = new WorldCreationState(handler);
-		prompt = new UIPrompt(handler, 20, handler.getHeight() - 40);
-
-		flint = new Item(handler, 100, 100, 16, 16, "flint");
-		clock = new Clock(handler);
-		
-		chat = new Chat(handler, 20, handler.getHeight() - 50 - 300, 400, 300, 10, 2, 5, 30);
-		
+		prompt = new UIPrompt(handler, promptLocX,promptLocY);
 	}
 
 	@Override
 	public void tick() {
-		clock.tick();
-
+		clock.tick(15);
 		world.tick();
-
+		
 		// COMMANDS
 		promptCommands();
 		keyCommands();
-
+//
 		if (createWorld) {
 			gameCreationState.tick();
 		}
-
-		flint.tick();
+//
+//		flint.tick();
 		prompt.tick();
-		chat.tick();
-
+//		chat.tick();
 	}
 
 	@Override
@@ -90,35 +73,29 @@ public class GameState extends State {
 
 		// SAVING..
 		if (save) {
-			gameCreationState.giveMessage(c, "PROGRESS SAVED");
-			c = c.brighter(1f - fadeValue);
+			gameCreationState.giveMessage(DARK_GRAY, "PROGRESS SAVED");
+			DARK_GRAY = DARK_GRAY.brighter(1f - fadeValue);
 			fadeValue -= 0.001f;
 			fadeMagnitude += (1f - fadeValue);
 		}
 		if (fadeMagnitude >= 1) {
 			fadeValue = 1f;
 			save = false;
-			c = Color.darkGray.darker();
+			DARK_GRAY= Color.darkGray.darker();
 			fadeMagnitude = 0f;
 		}
 
-		flint.render();
+//		flint.render();
 		
 		//inventory
 		if (handler.getWorld().getEntityManager().getPlayer().isUseInventory()) {
 			handler.getWorld().getEntityManager().getPlayer().getInventory()
 					.render();
 		}
-		//dialouge box
-		if (shouldDialogue) {
-			renderDialogue(dialogue);
-		}
-		
 		
 		prompt.render();
-		chat.render();
-		
-		
+//		chat.render();
+				
 		
 		//if no commands recognized
 		if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
@@ -129,23 +106,19 @@ public class GameState extends State {
 				for(int i =0;i<gameCreationState.getCommands().length;i++){
 					if(gameCreationState.getCommands()[i].equalsIgnoreCase(prompt.getPromptText())){
 						noMatch = false;
-						chat.addText("<" + gameCreationState.getExecutions()[i] + ">");
+//						chat.addText("<" + gameCreationState.getExecutions()[i] + ">");
 					}
 				
 				}
-				if(noMatch)
-					chat.addText("<Can't recognize the command! Did u try right clicking after it?>");
+//				if(noMatch)
+//					chat.addText("<Can't recognize the command! Did u try right clicking after it?>");
 			}else{
-				if(!prompt.getPromptText().equalsIgnoreCase(""))
-					chat.addText("[Player]" + handler.getPlayer().getUsername() + ">> " +prompt.getPromptText());
+//				if(!prompt.getPromptText().equalsIgnoreCase(""))
+//					chat.addText("[Player]" + handler.getPlayer().getUsername() + ">> " +prompt.getPromptText());
 				
 			}
 			
-			
-			
 		}
-		
-		
 		
 		
 	}
@@ -205,11 +178,11 @@ public class GameState extends State {
 
 	public void keyCommands() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-			toMenu = true;
+		toMenu = true;
 		}
 		if (toMenu) {
-			State.setState(handler.getGame().getMenuState());
-			toMenu = false;
+		State.setState(handler.getGame().getMenuState());
+		toMenu = false;
 		}
 
 	}
@@ -223,8 +196,5 @@ public class GameState extends State {
 		return clock;
 	}
 	
-	public Chat getChat(){
-		return chat;
-	}
 	
 }

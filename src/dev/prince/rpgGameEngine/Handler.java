@@ -25,10 +25,6 @@ public class Handler {
 		return game.getCamera();
 	}
 	
-	public Chat getChat(){
-		return game.getGameState().getChat();
-	}
-	
 	public void setWorld(World w){
 		this.world=w;
 	}
