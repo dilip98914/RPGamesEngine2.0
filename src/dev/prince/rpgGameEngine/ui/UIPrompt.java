@@ -7,7 +7,7 @@ import org.newdawn.slick.Color;
 
 import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.fonts.Fonts;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.states.State;
 import dev.prince.rpgGameEngine.utils.Utils;
 
@@ -50,7 +50,7 @@ public class UIPrompt extends UIObject{
 			if(pointerPos < text.length() -1)
 				textAfter = text.substring(pointerPos+1,text.length());
 			
-			if(Utils.parseInt(KeyManager.getInput(false)) == Keyboard.KEY_BACK){
+			if(Utils.parseInt(EventManager.getInput(false)) == Keyboard.KEY_BACK){
 				if(textPrev.length()>=1){
 					textPrev = textPrev.substring(0, textPrev.length()-1);
 					pointerPos--;
@@ -58,7 +58,7 @@ public class UIPrompt extends UIObject{
 			}
 			//ENTERING TEXT
 			
-			int key = Utils.parseInt(KeyManager.getInput(false));
+			int key = Utils.parseInt(EventManager.getInput(false));
 			if(key == Keyboard.KEY_RETURN){
 				textPrev="";
 				textAfter="";
@@ -67,7 +67,7 @@ public class UIPrompt extends UIObject{
 //				handler.getChat().getChats().add("Can't regonize the command! Did you try right clicking?");
 			}
 			if(key != Keyboard.KEY_BACK && key != Keyboard.KEY_RETURN){
-					String a =KeyManager.getInput(true); 
+					String a =EventManager.getInput(true); 
 					if(a!=""){
 						textPrev+=a;
 						pointerPos++;
@@ -115,7 +115,7 @@ public class UIPrompt extends UIObject{
 	}
 	
 	public void focusPrompt(){
-		if(Utils.parseInt(KeyManager.getInput(false)) == Keyboard.KEY_SLASH)
+		if(Utils.parseInt(EventManager.getInput(false)) == Keyboard.KEY_SLASH)
 			focused = true;
 	}
 	
@@ -128,6 +128,7 @@ public class UIPrompt extends UIObject{
 		}
 	}
 	
+	//i guess api to use outside?
 	public String getPromptText(){
 		String textPrev = text.substring(0, pointerPos);
 		String textAfter ="";

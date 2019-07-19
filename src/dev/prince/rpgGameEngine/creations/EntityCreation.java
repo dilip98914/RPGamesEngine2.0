@@ -11,14 +11,13 @@ import dev.prince.rpgGameEngine.entities.creatures.NPC;
 import dev.prince.rpgGameEngine.entities.statics.StaticEntity;
 import dev.prince.rpgGameEngine.gfx.Assets;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.states.GameState;
 import dev.prince.rpgGameEngine.utils.Utils;
 import dev.prince.rpgGameEngine.worlds.loadAndSave.WorldSave;
 
 public class EntityCreation extends Creation {
 
-//	private boolean makeDoor = false, makeStatic = false, makeNPC = false;
 	private boolean		place = false, hold = false;
 	private int mouseX, mouseY, sWidth = 50, sHeight = 50, staticEntityX,
 			staticEntityY;
@@ -96,17 +95,17 @@ public class EntityCreation extends Creation {
 			}
 		}
 		if (makeStatic) {
-			if (KeyManager.value == Keyboard.KEY_W) {
+			if (EventManager.value == Keyboard.KEY_W) {
 				sHeight += 5 * 2;
 
 			}
-			if (KeyManager.value == Keyboard.KEY_S)
+			if (EventManager.value == Keyboard.KEY_S)
 				sHeight -= 5 * 2;
-			if (KeyManager.value == Keyboard.KEY_D)
+			if (EventManager.value == Keyboard.KEY_D)
 				sWidth += 5 * 2;
-			if (KeyManager.value == Keyboard.KEY_A)
+			if (EventManager.value == Keyboard.KEY_A)
 				sWidth -= 5 * 2;
-			KeyManager.value = 0;
+			EventManager.value = 0;
 		}
 		while (Mouse.next()) {// MOUSE.NEXT()
 			if (Mouse.getEventButtonState()) {

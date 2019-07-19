@@ -9,7 +9,7 @@ import dev.prince.rpgGameEngine.gfx.Renderer;
 
 public  class Item extends Entity {
 	
-	private float[] imageData;
+	protected float[] imageData;
 	
 	
 	public Item(Handler handler, float x, float y, float width, float height,String name) {

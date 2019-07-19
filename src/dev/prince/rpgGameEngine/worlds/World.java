@@ -85,6 +85,7 @@ public class World {
 		entityManager.render();
 		
 		
+		//debug mode red quad rendering logic
 		Renderer.setColor(1f, 0f, 0f, 0.5f);
 		if(GameState.createWorld){
 			for(int i=0;i<solidTiles.size();i++){

@@ -13,14 +13,10 @@ public abstract class Creation {
 	public abstract void tick();
 	public abstract void render();
 	
-	private static Creation currentCreation=null;
+	public static Creation currentCreation=null;
 	
 	public static void setCreation(Creation c){
 		currentCreation=c;
-	}
-	
-	public static Creation getCreation(){
-		return currentCreation;
 	}
 	
 }

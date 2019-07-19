@@ -10,7 +10,7 @@ import dev.prince.rpgGameEngine.features.Inventory;
 import dev.prince.rpgGameEngine.fonts.Fonts;
 import dev.prince.rpgGameEngine.gfx.Assets;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.net.packets.Packet02Move;
 import dev.prince.rpgGameEngine.states.GameState;
 
@@ -48,9 +48,9 @@ public class Player extends Creature {
 				getInput();
 			interact();
 
-			if(KeyManager.value == Keyboard.KEY_E && !GameState.prompt.focused){
+			if(EventManager.value == Keyboard.KEY_E && !GameState.prompt.focused){
 				useInventory=!useInventory;
-				KeyManager.value=0;
+				EventManager.value=0;
 			}
 				if(useInventory){
 					inventory.tick();
@@ -149,7 +149,7 @@ public class Player extends Creature {
 	
 	@Override
 	public void render() {
-			
+//			System.out.println("player rendeing");
 		
 			Renderer.renderString(x-handler.getGameCamera().getxOffset() -Fonts.font.getWidth(username)/2+width/2, y-handler.getGameCamera().getyOffset()-20, username, Color.black, false);
 			Renderer.setColor(1, 1, 1, 1);

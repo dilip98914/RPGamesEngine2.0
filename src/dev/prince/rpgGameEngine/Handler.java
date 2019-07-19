@@ -3,7 +3,6 @@ package dev.prince.rpgGameEngine;
 import dev.prince.rpgGameEngine.entities.creatures.Player;
 import dev.prince.rpgGameEngine.features.Clock;
 import dev.prince.rpgGameEngine.gfx.GameCamera;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
 import dev.prince.rpgGameEngine.inputs.MouseManager;
 import dev.prince.rpgGameEngine.net.GameClient;
 import dev.prince.rpgGameEngine.net.GameServer;
@@ -55,10 +54,6 @@ public class Handler {
 	
 	public int getFrames(){
 		return game.getFrames();
-	}
-	
-	public KeyManager getKeyManager(){
-		return game.getKeyManager();
 	}
 	
 	public MouseManager getMouseManager(){

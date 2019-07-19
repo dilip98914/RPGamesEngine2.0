@@ -140,19 +140,18 @@ public class Game{
 		if(State.getState() !=null){
 			State.getState().tick();
 		}
-		keyManager.endTick();
+		EventManager.letter="";
+		EventManager.value=0;
 	}
 	
 	public void render(){
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glClearColor(0, 0, 0, 0);
 //		Color.white.bind();
-		keyManager.render();
-
+		EventManager.getEvents();
 		if(State.getState() !=null){
 			State.getState().render();
 		}		
-			
 //		TextArea.renderTextArea(handler.getWidth()-200, 33-25,"FPS: "+Frames+" UPS: "+Updates, Color.black,-1,-1);
 //		TextArea.renderTextArea(handler.getWidth()-200, 33,"Vsync: "+vsync, Color.black,-1,-1);
 		SoundStore.get().poll(0);
@@ -185,9 +184,6 @@ public class Game{
 	}
 	public boolean isVsync() {
 		return vsync;
-	}
-	public KeyManager getKeyManager() {
-		return keyManager;
 	}
 	public GameState getGameState() {
 		return gameState;

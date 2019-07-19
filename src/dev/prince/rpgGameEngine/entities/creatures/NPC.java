@@ -8,7 +8,7 @@ import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.entities.Entity;
 import dev.prince.rpgGameEngine.gfx.Assets;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.states.GameState;
 import dev.prince.rpgGameEngine.utils.Utils;
 
@@ -218,7 +218,7 @@ public class NPC extends Creature {
 
 	public void interact(){
 		if(checkIntersect()){
-			if(KeyManager.value==Keyboard.KEY_RETURN){
+			if(EventManager.value==Keyboard.KEY_RETURN){
 				interact=true;
 //				GameState.dialogue = name+": "+dialogue;
 				GameState.shouldDialogue = !GameState.shouldDialogue;

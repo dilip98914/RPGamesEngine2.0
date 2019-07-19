@@ -10,7 +10,7 @@ import dev.prince.rpgGameEngine.creations.EntityCreation;
 import dev.prince.rpgGameEngine.creations.MapCreation;
 import dev.prince.rpgGameEngine.creations.TileCreation;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.tiles.Tile;
 import dev.prince.rpgGameEngine.ui.TextArea;
 import dev.prince.rpgGameEngine.utils.Utils;
@@ -60,7 +60,7 @@ public class WorldCreationState extends State{
 //				 String some=modes[i].getClass().getSimpleName().substring(0, modes[i].getClass().getSimpleName().length()-8);
 //				 System.out.println(some);
 				 if(GameState.prompt.getPromptText().equalsIgnoreCase("/enter "+modes[i].getClass().getSimpleName().substring(0, modes[i].getClass().getSimpleName().length()-8))){
-					 if(KeyManager.value == Keyboard.KEY_RETURN ){
+					 if(EventManager.value == Keyboard.KEY_RETURN ){
 							Creation.setCreation(modes[i]);
 					 }
 				 }
@@ -69,8 +69,8 @@ public class WorldCreationState extends State{
 		 }
 		
 
-		if(Creation.getCreation()!=null){
-			Creation.getCreation().tick();
+		if(Creation.currentCreation!=null){
+			Creation.currentCreation.tick();
 		}
 		
 	}
@@ -91,9 +91,9 @@ public class WorldCreationState extends State{
 		 TextArea.renderTextArea(7,  130, "Level: "+GameState.currentLevel, Color.black,-1,-1);
 
 		 
-		 if(Creation.getCreation()!=null){
-			 TextArea.renderTextArea(7,  155, "MODE: "+Creation.getCreation().getClass().getSimpleName(), Color.black,-1,-1);
-				Creation.getCreation().render();
+		 if(Creation.currentCreation!=null){
+			 TextArea.renderTextArea(7,  155, "MODE: "+Creation.currentCreation.getClass().getSimpleName(), Color.black,-1,-1);
+				Creation.currentCreation.render();
 			}
 			
 		

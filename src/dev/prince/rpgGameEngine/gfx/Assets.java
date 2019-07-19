@@ -10,6 +10,10 @@ public class Assets {
 	//tiles
 	public static float[] grass,floor,sand,brick,stairs,path,woodFloor,darkWoodFloor;
 	
+	//pokemon
+	public static float[] pokemon;
+
+	
 	//static entities
 	public  float[] tree,house,pokeCenter,rock,fenceX,sign,mailBox,inscription,lab;
 	public  float[] pc,bed,bookShelf,mat,table,machine,cpu,tv,pot,painting;
@@ -33,6 +37,8 @@ public class Assets {
 
 	public static float tileWidth=32,tileHeight=32;
 
+	public static Texture pokemonTexture;
+
 	public  void init(){
 		staticEntities = new ArrayList<float[]>();
 		
@@ -54,7 +60,11 @@ public class Assets {
 		//INITIALIZE PICTURES
 		logo = ImageLoader.loadImage("res/textures/logo.png", "PNG");
 		credit = ImageLoader.loadImage("res/textures/creditState.png", "PNG");
+		pokemonTexture=ImageLoader.loadImage("res/textures/pikachu.png", "PNG");
+		
+		pokemon= new float[5];
 
+		
 		//INITIALIZE TILES DATA
 		floor = new float[5];
 		grass = new float[5];
@@ -114,6 +124,8 @@ public class Assets {
 		darkWoodFloor = fillTileData(darkWoodFloor,2,1,8,8);//
 
 		
+		fillTileData(pokemon,0,0,1,1);
+
 		//FILL STATICS DATA//////////////////////////////////////////////////////////////
 		tree = fillTileData(tree,1,1,8,8);
 		house = fillTileData(house,0,2,4,4);
@@ -176,6 +188,8 @@ public class Assets {
 		for(int i=0;i<statics.length;i++){
 			names.add(statics[i]);
 		}	
+		
+//		names.add("pokemon");
 		
 		/////////////////////////////////////////////////////////////////////////////////////
 		//FILL ANIMATED TILE DATA

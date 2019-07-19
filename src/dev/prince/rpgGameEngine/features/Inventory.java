@@ -6,7 +6,7 @@ import org.newdawn.slick.Color;
 import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.fonts.Fonts;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.ui.TextArea;
 
 public class Inventory {
@@ -60,14 +60,14 @@ public class Inventory {
 		}
 		//System.out.println("Visible length is: "+visibleLength);
 		//NAVIGATION
-		if(KeyManager.value == Keyboard.KEY_DOWN){
+		if(EventManager.value == Keyboard.KEY_DOWN){
 			if(selected<visibleLength-1)
 				selected++;
-			KeyManager.value=0;
-		}else if(KeyManager.value == Keyboard.KEY_UP){
+			EventManager.value=0;
+		}else if(EventManager.value == Keyboard.KEY_UP){
 			if(selected >= 1)
 				selected--;
-			KeyManager.value=0;
+			EventManager.value=0;
 		}
 		//System.out.println("SELECETED VALUE IS: "+selected);
 		

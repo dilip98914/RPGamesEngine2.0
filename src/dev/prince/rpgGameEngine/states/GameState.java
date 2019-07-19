@@ -5,12 +5,11 @@ import org.newdawn.slick.Color;
 
 import dev.prince.rpgGameEngine.Game;
 import dev.prince.rpgGameEngine.Handler;
-import dev.prince.rpgGameEngine.entities.Item;
+import dev.prince.rpgGameEngine.entities.Pokemon;
 import dev.prince.rpgGameEngine.features.Clock;
 import dev.prince.rpgGameEngine.fonts.Fonts;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
-import dev.prince.rpgGameEngine.ui.Chat;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.ui.UIPrompt;
 import dev.prince.rpgGameEngine.utils.Utils;
 import dev.prince.rpgGameEngine.worlds.World;
@@ -47,7 +46,7 @@ public class GameState extends State {
 
 	@Override
 	public void tick() {
-		clock.tick(15);
+		clock.tick(0);
 		world.tick();
 		
 		// COMMANDS
@@ -147,7 +146,7 @@ public class GameState extends State {
 	// DIFFERENT COMMANDS
 	public void promptCommands() {
 
-		if (((GameState.prompt.getPromptText().equalsIgnoreCase("/save")) && KeyManager.value == Keyboard.KEY_RETURN)) {
+		if (((GameState.prompt.getPromptText().equalsIgnoreCase("/save")) && EventManager.value == Keyboard.KEY_RETURN)) {
 			save = true;
 			gameCreationState.saveGame();
 
@@ -155,7 +154,7 @@ public class GameState extends State {
 		if (!createWorld) {
 
 			if (prompt.getPromptText().equalsIgnoreCase("/debug")
-					&& KeyManager.value == Keyboard.KEY_RETURN) {
+					&& EventManager.value == Keyboard.KEY_RETURN) {
 				createWorld = true;
 				prompt.setPromptText("_");
 				prompt.pointerPos = 0;

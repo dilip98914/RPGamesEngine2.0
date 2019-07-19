@@ -9,7 +9,7 @@ import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.features.Clock;
 import dev.prince.rpgGameEngine.gfx.Assets;
 import dev.prince.rpgGameEngine.gfx.Renderer;
-import dev.prince.rpgGameEngine.inputs.KeyManager;
+import dev.prince.rpgGameEngine.inputs.EventManager;
 import dev.prince.rpgGameEngine.net.packets.Packet05Thunder;
 import dev.prince.rpgGameEngine.states.GameState;
 
@@ -70,7 +70,7 @@ public class EffectsCreation extends Creation{
 		
 		//THUNDER
 		if(GameState.prompt.getPromptText().equalsIgnoreCase("/start Thunder")){
-			if(KeyManager.value==Keyboard.KEY_RETURN){
+			if(EventManager.value==Keyboard.KEY_RETURN){
 				thunder=true;
 				handler.getSFX().playSoundEffect(handler.getSFX().thunder,1,1,0);
 			}
@@ -78,12 +78,12 @@ public class EffectsCreation extends Creation{
 		
 		//RAIN
 		if(GameState.prompt.getPromptText().equalsIgnoreCase("/start Rain")){
-			if(KeyManager.value==Keyboard.KEY_RETURN)
+			if(EventManager.value==Keyboard.KEY_RETURN)
 				rain=true;
 				
 		}
 		if(GameState.prompt.getPromptText().equalsIgnoreCase("/stop Rain")){
-			if(KeyManager.value==Keyboard.KEY_RETURN)
+			if(EventManager.value==Keyboard.KEY_RETURN)
 				rain=false;
 				
 		}
