@@ -21,6 +21,14 @@ public class EventManager {
 			return String.valueOf(EventManager.value);
 	}
 	
+//	public static String getInput0(){
+//		if(letter0)
+//			return EventManager.letter;
+//		else
+//			return String.valueOf(EventManager.value);
+//	}
+//	
+	
 	private static void setInput() {
 		if((Keyboard.getEventCharacter()) != 0) {
 			letter=String.valueOf(Keyboard.getEventCharacter());
@@ -39,6 +47,10 @@ public class EventManager {
 	
 	public static void checkEvents() {
 		
+	}
+
+	public static Event[] emitEvents() {
+		return null;
 	}
 	
 }

@@ -41,7 +41,7 @@ public class World {
 	
 	public World(Handler handler,String worldPath){
 		this.handler=handler;
-		player=new Player(handler,x,y,"PRINCE");
+		player=new Player(handler,x,y,"Dilip","Dilip");
 		entityManager = new EntityManager(handler,player);
 		this.worldPath=worldPath;
 		solidTiles = new ArrayList<Integer[]>();
@@ -238,7 +238,7 @@ public class World {
 				String[] data = line.split("\\s+");
 				if(data[0].equalsIgnoreCase("npc")){//NPC
 					//WorldCreationState.npcCount++;
-					entityManager.addEntity(new NPC(handler,Utils.parseInt(data[1]),Utils.parseInt(data[2])));
+					entityManager.addEntity(new NPC(handler,Utils.parseInt(data[1]),Utils.parseInt(data[2]),"test"));
 				}
 				if(data[0].equalsIgnoreCase("door")){//DOOR
 					entityManager.addEntity(new Door(
@@ -249,7 +249,7 @@ public class World {
 							data[7],data[8],
 							data[9],data[10],
 							player,
-							((data[12].equalsIgnoreCase("true")?true:false))
+							((data[12].equalsIgnoreCase("true")?true:false)),"test"
 							));
 				}
 				if(data[0].equalsIgnoreCase("StaticEntity")){

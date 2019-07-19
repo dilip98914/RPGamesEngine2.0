@@ -14,7 +14,7 @@ public  class StaticEntity extends Entity {
 	//public Texture texture;
 	
 	public StaticEntity(Handler handler, float x, float y, float width,float height,String name) {
-		super(handler, x, y, width, height);
+		super(handler, x, y, width, height,name);
 		//this.texture=Assets.statics;
 		this.imageData=Assets.getImageData(name);
 		this.bounds=new Rectangle(0,0,(int)width,(int)height);

@@ -25,8 +25,8 @@ public abstract class Creature extends Entity {
 	protected int soundWait=0;
 
 	
-	public Creature(Handler handler, float x, float y, float width, float height) {
-		super(handler, x, y, width, height);
+	public Creature(Handler handler, float x, float y, float width, float height,String name) {
+		super(handler, x, y, width, height,name);
 		this.speed=DEFAULT_SPEED;
 		this.health = DEFAULT_HEALTH;
 		animSpeed= DEFAULT_ANIMSPEED;

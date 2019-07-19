@@ -104,7 +104,7 @@ public class GameServer extends Thread{
 				}
 				
 				//CONNECTION ESTABLISHMENT BETWEEN SERVER AND CURRENT CLIENT
-				PlayerMP playerMP = new PlayerMP(handler,x,y,((Packet00Login)packet).getUsername(),address,port,location,level);
+				PlayerMP playerMP = new PlayerMP(handler,x,y,((Packet00Login)packet).getUsername(),((Packet00Login)packet).getUsername(),address,port,location,level);
 				
 				handler.getWorld().getEntityManager().addEntity(playerMP);
 				

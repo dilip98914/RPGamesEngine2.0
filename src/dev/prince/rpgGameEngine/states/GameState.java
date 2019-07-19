@@ -87,10 +87,10 @@ public class GameState extends State {
 //		flint.render();
 		
 		//inventory
-		if (handler.getWorld().getEntityManager().getPlayer().isUseInventory()) {
-			handler.getWorld().getEntityManager().getPlayer().getInventory()
-					.render();
-		}
+//		if (handler.getWorld().getEntityManager().getPlayer().isUseInventory()) {
+//			handler.getWorld().getEntityManager().getPlayer().getInventory()
+//					.render();
+//		}
 		
 		prompt.render();
 //		chat.render();

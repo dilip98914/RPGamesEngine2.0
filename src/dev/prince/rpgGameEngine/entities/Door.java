@@ -36,8 +36,8 @@ public class Door extends Entity{
 	 * @param entityAllowed
 	 * @param xAxis
 	 */
-	public Door(Handler handler, float x1, float y1,float x2,float y2, float width, float height,String folder1,String world1,String folder2,String world2,Entity entityAllowed,boolean xAxis) {//xAxis is the orientation
-		super(handler, x1, y1, width, height);
+	public Door(Handler handler, float x1, float y1,float x2,float y2, float width, float height,String folder1,String world1,String folder2,String world2,Entity entityAllowed,boolean xAxis,String name) {//xAxis is the orientation
+		super(handler, x1, y1, width, height,name);
 		
 		localePacket = new Packet09Locale(GameState.currentLocation,GameState.currentLevel);
 		

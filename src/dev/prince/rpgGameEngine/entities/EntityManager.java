@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.entities.creatures.Player;
+import dev.prince.rpgGameEngine.gfx.Assets;
+import dev.prince.rpgGameEngine.inputs.Event;
 import dev.prince.rpgGameEngine.tiles.Tile;
 
 public class EntityManager {
@@ -14,7 +16,6 @@ public class EntityManager {
 	private Handler handler;
 
 	private Player player;
-	private Pokemon pokemon;
 
 	public Iterator<Entity> iterator;
 	private ArrayList<Entity> entities;
@@ -38,10 +39,8 @@ public class EntityManager {
 	public EntityManager(Handler handler,Player player){
 		this.handler=handler;
 		this.player=player;
-		pokemon=new Pokemon(handler, 200,200,256,256,"pokemon");
 		entities = new ArrayList<Entity>();
 		entities.add(player);
-//		entities.add(pokemon);
 		iterator = entities.iterator();
 
 	}
@@ -84,7 +83,6 @@ public class EntityManager {
 		if(e.isActive	
 				){
 		e.render();
-		pokemon.render();
 	}
 			
 			

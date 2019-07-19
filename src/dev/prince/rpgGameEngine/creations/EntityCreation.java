@@ -116,7 +116,7 @@ public class EntityCreation extends Creation {
 						&& GameState.prompt.getPromptText().equalsIgnoreCase(
 								"/USE NPC")) {
 					handler.getWorld().getEntityManager()
-							.addEntity(new NPC(handler, mouseX, mouseY));
+							.addEntity(new NPC(handler, mouseX, mouseY,"test"));
 
 				}
 
@@ -136,7 +136,7 @@ public class EntityCreation extends Creation {
 								GameState.currentLevel.substring(0,
 										GameState.currentLevel.length() - 6),
 								doorData[3+2], doorData[4+2], handler.getWorld()
-										.getEntityManager().getPlayer(), true)
+										.getEntityManager().getPlayer(), true,"testDoor")
 								: new Door(handler, mouseX, mouseY,
 										Utils.parseInt(doorData[1+2]),
 										Utils.parseInt(doorData[2+2]), 20,
@@ -148,7 +148,7 @@ public class EntityCreation extends Creation {
 																.length() - 6),
 										doorData[3+2], doorData[4+2], handler
 												.getWorld().getEntityManager()
-												.getPlayer(), false));
+												.getPlayer(), false,"testDoor"));
 						handler.getWorld().getEntityManager().addEntity(d);
 						makeDoor = false;
 						WorldSave.saveDoor(d);

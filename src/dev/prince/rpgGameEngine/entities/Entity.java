@@ -12,15 +12,13 @@ import dev.prince.rpgGameEngine.states.GameState;
 
 
 public abstract class Entity {
-	
+	/*TextureLess Entity*/
 	protected Handler handler;
 	protected boolean interact =false;
 	protected Entity interactingWith=null;
-	protected float x,y;
-	protected float width,height;
+	protected float x,y,width,height;
 	protected Rectangle bounds;
-	private 	 Iterator<Entity> iterator;
-
+	private  Iterator<Entity> iterator;
 	public int zIndex=0;
 	
 	protected boolean isActive=false,isStatic=false,isItem=false;
@@ -29,26 +27,30 @@ public abstract class Entity {
 	
 	protected float xMove=0,yMove=0;
 	
-	public  ArrayList<String> params;
+	public ArrayList<String> params;
 	
 	public static ArrayList<String> classes;
 	
-	public Entity(Handler handler,float x, float y,float width,float height){
+	protected String name;
+	
+	public Entity(Handler handler,float x, float y,float width,float height,String name){
 		this.handler=handler;
 		this.x=x;
 		this.y=y;
 		this.width=width;
 		this.height=height;
 		bounds = new Rectangle((int)0,(int)0,(int)width,(int)height);
-		
+		this.name=name;
 		params=new ArrayList<String>();
 		classes=new ArrayList<String>();
 
 		//add Paramters
-		params.add(String.valueOf((int)x));
-		params.add(String.valueOf((int)y));
-		params.add(String.valueOf((int)width));
-		params.add(String.valueOf((int)height));
+		params.add( (int)x+"");
+		params.add((int)y+"");
+		params.add( (int)width+"");
+		params.add( (int)height+"");
+		params.add( name);
+
 		
 		//fill classes
 		classes.add(this.getClass().getSimpleName());
@@ -112,8 +114,6 @@ public abstract class Entity {
 		return y;
 	}
 	
-	
-	
 	public void setX(float x) {
 		this.x = x;
 	}
@@ -153,7 +153,5 @@ public abstract class Entity {
 	public void setyMove(float yMove) {
 		this.yMove = yMove;
 	}
-	
-	
 	
 }

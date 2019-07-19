@@ -107,7 +107,7 @@ public class GameClient extends Thread{
 				while(iterator.hasNext()){
 					PlayerMP p = iterator.next();
 					if(!p.ipAddress.equals(basicLogin[5]) || p.port != portMP){
-						playerMP=new PlayerMP(handler,x,y,name,InetAddress.getByName(basicLogin[5]),portMP);
+						playerMP=new PlayerMP(handler,x,y,name,name,InetAddress.getByName(basicLogin[5]),portMP);
 						connectedPlayers.add(playerMP);
 						handler.getWorld().getEntityManager().addEntity(playerMP);
 					}
@@ -117,7 +117,7 @@ public class GameClient extends Thread{
 			case LOGIN:
 				String[] packetData = message.split("\\s+");
 				packet = new Packet00Login(packetData[1],Utils.parseInt(packetData[2]),Utils.parseInt(packetData[3]),Utils.parseInt(packetData[4]),Utils.parseInt(packetData[5]));	
-				playerMP = new PlayerMP(handler,((Packet00Login)packet).getSpawnX(),((Packet00Login)packet).getSpawnY(),((Packet00Login)packet).getUsername(),address,port);
+				playerMP = new PlayerMP(handler,((Packet00Login)packet).getSpawnX(),((Packet00Login)packet).getSpawnY(),((Packet00Login)packet).getUsername(),((Packet00Login)packet).getUsername(),address,port);
 				connectedPlayers.add(playerMP);
 				handler.getPlayer().setX(((Packet00Login)packet).getThisX());
 				handler.getPlayer().setY(((Packet00Login)packet).getThisY());

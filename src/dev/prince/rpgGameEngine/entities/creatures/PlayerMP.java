@@ -15,8 +15,8 @@ public class PlayerMP extends Player{
 	private String level="null",location="null";
 	
 
-	public PlayerMP(Handler handler, float x, float y,String username,InetAddress ipAddress,int port) {
-		super(handler, x, y,username);
+	public PlayerMP(Handler handler, float x, float y,String name,String username,InetAddress ipAddress,int port) {
+		super(handler, x, y,name,username);
 		this.ipAddress=ipAddress;
 		this.port=port;
 		oldX=x;
@@ -24,8 +24,8 @@ public class PlayerMP extends Player{
 		this.location = GameState.currentLocation;
 		this.level=GameState.currentLevel;
 	}
-	public PlayerMP(Handler handler, float x, float y,String username,InetAddress ipAddress,int port,String location,String level) {
-		this(handler,x,y,username,ipAddress,port);
+	public PlayerMP(Handler handler, float x, float y,String name,String username,InetAddress ipAddress,int port,String location,String level) {
+		this(handler,x,y,name,username,ipAddress,port);
 		this.location=location;
 		this.level=level;
 	}

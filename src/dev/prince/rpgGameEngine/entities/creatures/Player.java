@@ -1,12 +1,18 @@
 package dev.prince.rpgGameEngine.entities.creatures;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import dev.prince.rpgGameEngine.Game;
 import dev.prince.rpgGameEngine.Handler;
+import dev.prince.rpgGameEngine.entities.Item;
+import dev.prince.rpgGameEngine.entities.Pokemon;
 import dev.prince.rpgGameEngine.features.Inventory;
+import dev.prince.rpgGameEngine.features.InventoryItem;
 import dev.prince.rpgGameEngine.fonts.Fonts;
 import dev.prince.rpgGameEngine.gfx.Assets;
 import dev.prince.rpgGameEngine.gfx.Renderer;
@@ -17,28 +23,26 @@ import dev.prince.rpgGameEngine.states.GameState;
 public class Player extends Creature {
 	
 	protected Texture sheet;
-	private Inventory inventory;
 	private boolean useInventory=false;
 	private Packet02Move movePacket = new Packet02Move((byte)0,(byte)0);
 //	private float xOld,yOld;
 	private String username;
 	private byte countMP=0;
-	private String[] items,quantities;
+	private ArrayList<InventoryItem> items=new ArrayList<InventoryItem>();
+	private Inventory inventory;
+	private Item pokemon;
 	
-	public Player(Handler handler, float x, float y,String username) {
-		super(handler, x, y,DEFAULT_WIDTH,DEFAULT_HEIGHT);
+	public Player(Handler handler, float x, float y,String name,String username) {
+		super(handler, x, y,DEFAULT_WIDTH,DEFAULT_HEIGHT,name);
 		bounds.setX(18);
 		bounds.setY(38 );
 		bounds.setWidth(17);
 		bounds.setHeight(12);
-		
-		
 		this.username = username;
 		sheet = Assets.playerSheet;
-		items = new String[]{"TNT","Dynamite","Bombs","C-4 Charges","TNT","Dynamite","Bombs","C-4 Charges","TNT","Dynamite","Bombs","C-4 Charges","TNT","Dynamite","Bombs","C-4 Charges","TNT","Dynamite","Bombs","C-4 Charges"};
-		quantities = new String[]{"21","10","79","4","21","10","79","4","21","10","79","4","21","10","79","4","21","10","79","4"};
-		inventory = new Inventory(handler,items,quantities);
-
+		pokemon=new Pokemon(handler,"pikachu",new float[] {0,0,1,1,1},Assets.pokemonTexture);
+		items.add(new InventoryItem(pokemon, 2));
+		inventory = new Inventory(handler,items);
 	}
 	
 	@Override
@@ -53,14 +57,14 @@ public class Player extends Creature {
 				EventManager.value=0;
 			}
 				if(useInventory){
-					inventory.tick();
+					inventory.tick(EventManager.emitEvents());
 					return;
 				}
 				zIndex=0;
 				checkSwim();
 				if(isSwimming){
-					sheet = Assets.playerSwimSheet;
-	
+//					sheet = Assets.playerSwimSheet;
+//					sheet = Assets.playerSheet;
 				}else{
 					isSwimming = false;
 					sheet = Assets.playerSheet;
@@ -155,6 +159,10 @@ public class Player extends Creature {
 			Renderer.setColor(1, 1, 1, 1);
 			Renderer.renderSubImage(sheet,(x-handler.getGameCamera().getxOffset()),(y-handler.getGameCamera().getyOffset()),width,height,getCurrentAnimationFrame(), 1f);
 			
+			if(useInventory) {
+				getInventory().render();
+			}
+			
 			/*
 		 	Renderer.setColor(1, 1, 1, 0.51f);
 			Renderer.renderQuad((x-handler.getGameCamera().getxOffset())+bounds.getX(), (y-handler.getGameCamera().getyOffset())+bounds.getY(), bounds.getWidth(), bounds.getHeight());
@@ -211,5 +219,7 @@ public class Player extends Creature {
 	public String getUsername() {
 		return username;
 	}
+
+	
 	
 }

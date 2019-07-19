@@ -26,8 +26,8 @@ public class NPC extends Creature {
 	private String name = "Anonymous" , dialogue="...";
 	private boolean isMerchant=false,interact=false;
 	
-	public NPC(Handler handler, float x, float y) {
-		super(handler, x, y, DEFAULT_WIDTH,DEFAULT_HEIGHT);
+	public NPC(Handler handler, float x, float y,String name) {
+		super(handler, x, y, DEFAULT_WIDTH,DEFAULT_HEIGHT,name);
 		bounds.setX(18);
 		bounds.setY(38 );
 		bounds.setWidth(17);
@@ -36,13 +36,13 @@ public class NPC extends Creature {
 		lastTime=System.currentTimeMillis();
 	}
 	
-	public NPC(Handler handler,float x,float y,String name,String dialogue,boolean isMerchant,boolean isStatic){
-		this(handler,x,y);
-		this.name=name;
-		this.dialogue = dialogue;
-		this.isMerchant=isMerchant;
-		this.isStaticNPC=isStatic;
-	}	
+//	public NPC(Handler handler,float x,float y,String name,String dialogue,boolean isMerchant,boolean isStatic){
+//		this(handler,x,y);
+//		this.name=name;
+//		this.dialogue = dialogue;
+//		this.isMerchant=isMerchant;
+//		this.isStaticNPC=isStatic;
+//	}	
 	
 	@Override
 	public void tick() {
