@@ -46,6 +46,7 @@ public class World {
 		this.worldPath=worldPath;
 		solidTiles = new ArrayList<Integer[]>();
 		loadWorld(this.worldPath);	
+		entityManager.initEntities();
 		WorldSave.init(handler);
 		
 	}
@@ -218,7 +219,8 @@ public class World {
 	public void loadEntity(){	
 		
 		entityManager.getEntities().removeAll(entityManager.getEntities());
-		entityManager.addEntity(player);
+//		entityManager.addEntity(player);
+		entityManager.initEntities();
 		if(Game.isServer){
 			for(PlayerMP p:handler.getServer().connectedPlayers){
 				entityManager.addEntity(p);

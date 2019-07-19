@@ -9,6 +9,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import dev.prince.rpgGameEngine.Game;
 import dev.prince.rpgGameEngine.Handler;
+import dev.prince.rpgGameEngine.entities.Entity;
 import dev.prince.rpgGameEngine.entities.Item;
 import dev.prince.rpgGameEngine.entities.Pokemon;
 import dev.prince.rpgGameEngine.features.Inventory;
@@ -40,10 +41,18 @@ public class Player extends Creature {
 		bounds.setHeight(12);
 		this.username = username;
 		sheet = Assets.playerSheet;
-		pokemon=new Pokemon(handler,"pikachu",new float[] {0,0,1,1,1},Assets.pokemonTexture);
-		items.add(new InventoryItem(pokemon, 2));
+
+		items.add(new InventoryItem(new Pokemon(handler,"pikachu",0,0), 2));
+		items.add(new InventoryItem(new Pokemon(handler,"pikachu",1,1), 2));
+		items.add(new InventoryItem(new Pokemon(handler,"pikachu",2,2), 2));
+
 		inventory = new Inventory(handler,items);
 	}
+	
+	public void addToInventory(Item i) {
+		items.add(new InventoryItem(i, 1));
+	}
+	
 	
 	@Override
 	public void tick() {
@@ -58,7 +67,7 @@ public class Player extends Creature {
 			}
 				if(useInventory){
 					inventory.tick(EventManager.emitEvents());
-					return;
+//					return;
 				}
 				zIndex=0;
 				checkSwim();

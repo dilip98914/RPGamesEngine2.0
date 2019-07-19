@@ -241,5 +241,7 @@ public class Door extends Entity{
 	public void changeEntity(){
 		
 	}
+
+
 	
 }

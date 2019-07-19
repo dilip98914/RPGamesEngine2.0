@@ -32,6 +32,7 @@ public abstract class Entity {
 	public static ArrayList<String> classes;
 	
 	protected String name;
+//	public boolean interacted=false;
 	
 	public Entity(Handler handler,float x, float y,float width,float height,String name){
 		this.handler=handler;

@@ -25,8 +25,8 @@ public class Item extends Entity {
 	}
 	@Override
 	public void render() {
-		float xx= this.isItem?x:x-handler.getGameCamera().getxOffset();
-		float yy= this.isItem?y:y-handler.getGameCamera().getyOffset();
+		float xx= /*this.isItem?x:*/x-handler.getGameCamera().getxOffset();
+		float yy=y-handler.getGameCamera().getyOffset();
 		Renderer.renderSubImage(this.texture,xx,yy,width,height, imageData,(byte)1f);
 	}
 	public void render(float xx,float yy,float widtht,float heightt) {

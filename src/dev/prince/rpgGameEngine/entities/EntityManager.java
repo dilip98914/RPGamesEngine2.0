@@ -16,10 +16,14 @@ public class EntityManager {
 	private Handler handler;
 
 	private Player player;
+	private Pokemon bulbasur;
 
-	public Iterator<Entity> iterator;
+	public Iterator<Pokemon> pokeIterator;
+	public Iterator<Entity> entityIterator;
 	private ArrayList<Entity> entities;
+	private ArrayList<Pokemon> pokemons;
 	private Comparator<Entity> renderSorter = new Comparator<Entity>(){
+		
 		
 	public int compare(Entity a , Entity b){
 			
@@ -35,65 +39,128 @@ public class EntityManager {
 		}
 		
 	};
+	private boolean added=false;
+	
+	public boolean playerTouchesItem(Entity e,int xOffset,int yOffset) {
+		if(this.player.getCollisionBounds(0f, 0f).intersects(e.getCollisionBounds(xOffset,yOffset))) {
+			return true;
+		}
+		return false;
+	}
 	
 	public EntityManager(Handler handler,Player player){
 		this.handler=handler;
 		this.player=player;
+		bulbasur=new Pokemon(handler, 629, 189, 40, 40, "idk", 0,0);
 		entities = new ArrayList<Entity>();
-		entities.add(player);
-		iterator = entities.iterator();
-
+		pokemons = new ArrayList<Pokemon>();
 	}
 	
+	public void initEntities() {
+		entities.add(player);
+		pokemons.add(bulbasur);
+		entityIterator = entities.iterator();
+		pokeIterator= pokemons.iterator();
+	}
+	
+	public void collectPokemonByPlayer(Pokemon pokemon0) {
+		if(pokemon0.interacted) {
+//			System.out.println(pokemon0.interacted);
+			if(!added) {
+				this.player.addToInventory(pokemon0);
+				added=true;
+			}
+			this.pokeIterator.remove();
+//			pokemon0.interacted=false;
+		}
+	}
+
+	
 	public void tick(int xStart,int xEnd,int yStart,int yEnd){
-		iterator = entities.iterator();
-		
-		while(iterator.hasNext()){
-			Entity e = iterator.next();
+		entityIterator = entities.iterator();
+		pokeIterator=pokemons.iterator();
+		while(entityIterator.hasNext()){
+			Entity e = entityIterator.next();
 			
-			if(e.getX() + e.getWidth() > xStart*Tile.TILEWIDTH && e.getX() < xEnd * Tile.TILEWIDTH &&
-				e.getY() + e.getHeight() > yStart*Tile.TILEHEIGHT && e.getY() < yEnd*Tile.TILEHEIGHT	
+//			if(e instanceof Pokemon) {
+//				Pokemon ee=(Pokemon)e;
+//				collectPokemonByPlayer(ee);
+////				System.out.println("tryinh but can't");
+//			}else {
+////				System.out.println("cant find");
+//			}
+			if((e.getX() + e.getWidth() > xStart*Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH) &&
+				(e.getY() + e.getHeight() > yStart*Tile.TILEHEIGHT) && (e.getY() < yEnd*Tile.TILEHEIGHT)	
 				){
 				e.isActive=true;
 			}else{
 				e.isActive=false;
 			}
+
 			if(e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")){
 				e.tick();
 				continue;
 			}
 			
-			if(e.isActive )
+			if(e.isActive ) {
 				e.tick();
+			}
 			
 		}
+//
+		
+		while(pokeIterator.hasNext()){
+			Pokemon p = pokeIterator.next();
+			
+//			if((e.getX() + e.getWidth() > xStart*Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH) &&
+//				(e.getY() + e.getHeight() > yStart*Tile.TILEHEIGHT) && (e.getY() < yEnd*Tile.TILEHEIGHT)	
+//				){
+//				e.isActive=true;
+//			}else{
+//				e.isActive=false;
+//			}
+			p.isActive=true;
+			if(p.isActive ) {
+				collectPokemonByPlayer(p);
+				p.tick();
+			}
+		}
+
+		
+//		for(Pokemon p:pokemons) {
+//			p.tick();
+//		}
 		entities.sort(renderSorter);
 	} 
 	
 	public void render(){
-		iterator = entities.iterator();
-		
-		while(iterator.hasNext()){
-			Entity e = iterator.next();	
+		entityIterator = entities.iterator();
+		pokeIterator = pokemons.iterator();
+		while(entityIterator.hasNext()){
+			Entity e = entityIterator.next();	
 			
 		if(e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")){
 				e.render();
 				continue;
 			}
-		if(e.isActive	
-				){
-		e.render();
-	}
-			
+		if(e.isActive){
+				e.render();
+			}
 			
 		}
-		
+
+		while(pokeIterator.hasNext()){
+			Pokemon p = pokeIterator.next();
+			if(p.isActive ) {
+				p.render();
+			}
+		}
 	}
 	
 	///HEPLER METHODS///
 	public void addEntity(Entity e){
 		entities.add(e);
-			iterator = entities.iterator();
+		entityIterator = entities.iterator();
 	}
 	
 	public void removeEntity(Entity e){
@@ -118,6 +185,8 @@ public class EntityManager {
 	public ArrayList<Entity> getEntities() {
 		return entities;
 	}
+
+	
 	
 	
 	

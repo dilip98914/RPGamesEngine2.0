@@ -29,6 +29,8 @@ public class Assets {
 	public static Texture tileSet , playerSheet , playerSwimSheet , NPCsheet,NPCswimSheet,statics,items,rain;
 	public static Texture logo,credit;
 	
+	public static Texture pokemons;
+	
 	//animated entities
 	public static float[][] characterDown,characterUp,characterLeft,characterRight;
 	
@@ -61,6 +63,10 @@ public class Assets {
 		logo = ImageLoader.loadImage("res/textures/logo.png", "PNG");
 		credit = ImageLoader.loadImage("res/textures/creditState.png", "PNG");
 		pokemonTexture=ImageLoader.loadImage("res/textures/pikachu.png", "PNG");
+		
+		pokemons= ImageLoader.loadImage("res/textures/pokemons2.png", "PNG");
+
+		
 		
 		pokemon= new float[5];
 
