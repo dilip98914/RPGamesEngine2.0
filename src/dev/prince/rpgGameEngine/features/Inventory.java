@@ -1,6 +1,7 @@
 package dev.prince.rpgGameEngine.features;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import org.newdawn.slick.Color;
 
@@ -23,14 +24,16 @@ public class Inventory {
 	private float[] selectedColor;
 
 	public ArrayList<InventoryItem> items;
+	public ListIterator<InventoryItem> inventoryIterator;
+
 	public InventoryItem currentItem;
-	public int index;
+	public int index = 0;
 //	public boolean throwCurretItem=false;
 
-	public Inventory(Handler handler, ArrayList<InventoryItem> items) {
+	public Inventory(Handler handler) {
 		this.handler = handler;
-		this.items = items;
-
+//		this.items = items;
+//		this.inventoryIterator=inventoryIterator;
 		// DEFINE WIDTH AND HEIGHT
 		width = handler.getWidth() - 2 * (10 * X_OFFSET);
 		height = Y_OFFSET + Fonts.font.getHeight("ANYTHING") * displayQuantity + displayQuantity * Y_OFFSET + Y_OFFSET;
@@ -38,12 +41,21 @@ public class Inventory {
 		y = handler.getHeight() / 2 - height / 2;
 
 //		error may be here?
-		currentItem = items.get(0);
-		index = 0;
+//		currentItem = items.get(0);
+//		index = 0;
 		// DEFINE COLOR FLOAT VALUES
 		selectedColor = new float[] { 1, 0, 0, 0.8f };
 	}
 
+	public void setInventory(ListIterator<InventoryItem> inventoryIterator) {
+		this.inventoryIterator=inventoryIterator;
+	}
+	
+	public void setList(ArrayList<InventoryItem> items) {
+		this.items=items;
+	}
+	
+	
 	/* still neater way to handle events in each file */
 	public void getEvents() {
 //			System.out.println(EventManager.getInput(true));
@@ -56,16 +68,18 @@ public class Inventory {
 			}
 		} else if (key.contains("w")) {
 			index--;
-			if (index <0) {
+			if (index < 0) {
 				index = items.size() - 1;
 			}
-		}else if(key.contains("q")) {
-			currentItem.item.throwIt=true;
+		} else if (key.contains("q")) {
+//			currentItem.item.throwIt = true;
 		}
 	}
 
 	public void tick(Event[] events) {
 		getEvents();
+//		this.inventoryIterator=handler.ge;
+
 		// Set Values
 //		visibleLength=0;
 //		
@@ -92,12 +106,16 @@ public class Inventory {
 //		}
 
 		// System.out.println("SELECETED VALUE IS: "+selected);
-		currentItem = items.get(index);
+//		while (inventoryIterator.hasNext()) {
+//			InventoryItem e = inventoryIterator.next();
+//		}
+//		currentItem = items.get(index);
 		handler.getWorld().getEntityManager().getPlayer().zIndex = 1;
 
 	}
 
 	public void render() {
+		System.out.println("inventory calling render");
 
 		TextArea.renderTextArea(handler.getWidth() / 2 - Fonts.fontBig.getWidth(title) / 2,
 				y - TextArea.getyOffset() * 2 - Fonts.fontBig.getHeight("I"), title, Color.white,
@@ -127,18 +145,36 @@ public class Inventory {
 		int constY = 10;
 		int yOff = 0;
 		float alpha = 0.6f;
-		for (InventoryItem item : items) {
-			if (item == currentItem) {
-				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
-			} else {
-				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
-			}
-			Renderer.renderQuad(x + constX1, (y + yOff), 200, 39);
+//		for (InventoryItem item : items) {
+//			if (item == currentItem) {
+//				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
+//			} else {
+//				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
+//			}
+//			Renderer.renderQuad(x + constX1, (y + yOff), 200, 39);
+//
+//			item.item.render(x + constX1, (y + yOff) + constY, 40, 40);
+//			Renderer.renderString(x + constX2 / 2, (y + yOff) + constY, "-", Color.white, true);
+//			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(item.quantity), Color.white, true);
+//			yOff += 40;
+//		}
 
+		while (inventoryIterator.hasNext()) {
+//			System.out.println("here");
+			InventoryItem item = inventoryIterator.next();
+//			if (item == currentItem) {
+//				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
+//			} else {
+//				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
+//			}
+			Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
+			Renderer.renderQuad(x + constX1, (y + yOff), 200, 39);
+			
 			item.item.render(x + constX1, (y + yOff) + constY, 40, 40);
 			Renderer.renderString(x + constX2 / 2, (y + yOff) + constY, "-", Color.white, true);
 			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(item.quantity), Color.white, true);
 			yOff += 40;
+
 		}
 
 	}

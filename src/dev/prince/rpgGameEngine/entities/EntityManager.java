@@ -5,13 +5,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import org.lwjgl.input.Keyboard;
+
 import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.entities.creatures.Player;
 import dev.prince.rpgGameEngine.features.InventoryItem;
 import dev.prince.rpgGameEngine.tiles.Tile;
 
 public class EntityManager {
-	
+
 	@SuppressWarnings("unused")
 	private Handler handler;
 
@@ -20,86 +22,96 @@ public class EntityManager {
 
 	public ListIterator<Pokemon> pokeIterator;
 	public ListIterator<Entity> entityIterator;
-	public  ListIterator <InventoryItem> inventoryIterator;	
+	public ListIterator<InventoryItem> inventoryIterator;
+	
 	private ArrayList<Entity> entities;
 	private ArrayList<Pokemon> pokemons;
-	private Comparator<Entity> renderSorter = new Comparator<Entity>(){
-		public int compare(Entity a , Entity b){
-				
-				if(a.zIndex < b.zIndex)
-					return -1;
-				if(a.zIndex > b.zIndex)
-					return 1;
-				if(a.getY()+a.getHeight()<b.getY()+b.getHeight()){
-					return -1;
-				}else{
-					return 1;
-				}
+	private ArrayList<InventoryItem> items;
+
+	private Comparator<Entity> renderSorter = new Comparator<Entity>() {
+		public int compare(Entity a, Entity b) {
+
+			if (a.zIndex < b.zIndex)
+				return -1;
+			if (a.zIndex > b.zIndex)
+				return 1;
+			if (a.getY() + a.getHeight() < b.getY() + b.getHeight()) {
+				return -1;
+			} else {
+				return 1;
 			}
-		
+		}
+
 	};
-	private boolean added=false;
-	
-	public boolean playerTouchesItem(Entity e,int xOffset,int yOffset) {
-		if(this.player.getCollisionBounds(0f, 0f).intersects(e.getCollisionBounds(xOffset,yOffset))) {
+	private boolean added = false;
+
+	public boolean playerTouchesItem(Entity e, int xOffset, int yOffset) {
+		if (this.player.getCollisionBounds(0f, 0f).intersects(e.getCollisionBounds(xOffset, yOffset))) {
 			return true;
 		}
 		return false;
 	}
-	
-	public EntityManager(Handler handler,Player player){
-		this.handler=handler;
-		this.player=player;
-		bulbasur=new Pokemon(handler, 629, 189, 40, 40, "idk", 0,0);
+
+	public EntityManager(Handler handler, Player player) {
+		this.handler = handler;
+		this.player = player;
+//		lets see if it works
+		bulbasur = new Pokemon(handler, 629, 189, 40, 40, "idk", 0, 0);
 		entities = new ArrayList<Entity>();
 		pokemons = new ArrayList<Pokemon>();
+		items = new ArrayList<InventoryItem>();
+		
 	}
-	
+
 	public void initEntities() {
-//		entities.add(player);
-//		pokemons.add(bulbasur);
 		entityIterator = entities.listIterator();
-		pokeIterator= pokemons.listIterator();
-		inventoryIterator=player.inventoryIterator;
+		pokeIterator = pokemons.listIterator();
+		inventoryIterator = items.listIterator();
+
 		entityIterator.add(player);
 		pokeIterator.add(bulbasur);
+		inventoryIterator.add(new InventoryItem(bulbasur, 2));
+		this.player.getInventory().setList(items);
+		this.player.getInventory().setInventory(inventoryIterator);
+
 	}
-	
+
 	public void collectPokemonByPlayer(Pokemon pokemon0) {
-		if(pokemon0.interacted) {
+		if (pokemon0.interacted) {
 //			System.out.println(pokemon0.interacted);
-			if(!added) {
+			if (!added) {
 				this.inventoryIterator.add(new InventoryItem(pokemon0, 1));
 //				this.player.addToInventory(pokemon0);
-				added=true;
+				added = true;
 			}
 			this.pokeIterator.remove();
 //			pokemon0.interacted=false;
 		}
 	}
-	
+
 	public void throwPokemonByPlayer() {
-		Pokemon inventoryPokemon=(Pokemon)player.getInventory().currentItem.item;
-		
-		while(inventoryIterator.hasNext()){
+		Pokemon inventoryPokemon = (Pokemon) player.getInventory().currentItem.item;
+
+		while (inventoryIterator.hasNext()) {
 			InventoryItem e = inventoryIterator.next();
-			if(e.item.throwIt) {
+			if (e.item.throwIt) {
 				System.out.println("calling");
 //				this.player.removeFromInventory(inventoryPokemon);
 				inventoryIterator.remove();
-				e.item.throwIt=false;
+				e.item.throwIt = false;
 			}
 		}
-		
+
 	}
 
-	
-	public void tick(int xStart,int xEnd,int yStart,int yEnd){
+	public void tick(int xStart, int xEnd, int yStart, int yEnd) {
 		entityIterator = entities.listIterator();
-		pokeIterator=pokemons.listIterator();
-		while(entityIterator.hasNext()){
+		pokeIterator = pokemons.listIterator();
+		inventoryIterator = items.listIterator();
+		this.player.getInventory().setInventory(inventoryIterator);
+
+		while (entityIterator.hasNext()) {
 			Entity e = entityIterator.next();
-			
 //			if(e instanceof Pokemon) {
 //				Pokemon ee=(Pokemon)e;
 //				collectPokemonByPlayer(ee);
@@ -107,30 +119,28 @@ public class EntityManager {
 //			}else {
 ////				System.out.println("cant find");
 //			}
-			if((e.getX() + e.getWidth() > xStart*Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH) &&
-				(e.getY() + e.getHeight() > yStart*Tile.TILEHEIGHT) && (e.getY() < yEnd*Tile.TILEHEIGHT)	
-				){
-				e.isActive=true;
-			}else{
-				e.isActive=false;
+			if ((e.getX() + e.getWidth() > xStart * Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH)
+					&& (e.getY() + e.getHeight() > yStart * Tile.TILEHEIGHT) && (e.getY() < yEnd * Tile.TILEHEIGHT)) {
+				e.isActive = true;
+			} else {
+				e.isActive = false;
 			}
 
-			if(e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")){
+			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
 				e.tick();
 				continue;
 			}
-			
-			if(e.isActive ) {
+
+			if (e.isActive) {
 				e.tick();
 			}
-			
-			
+
 		}
 //
-		
-		while(pokeIterator.hasNext()){
+
+		while (pokeIterator.hasNext()) {
 			Pokemon p = pokeIterator.next();
-			
+
 //			if((e.getX() + e.getWidth() > xStart*Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH) &&
 //				(e.getY() + e.getHeight() > yStart*Tile.TILEHEIGHT) && (e.getY() < yEnd*Tile.TILEHEIGHT)	
 //				){
@@ -138,66 +148,75 @@ public class EntityManager {
 //			}else{
 //				e.isActive=false;
 //			}
-			p.isActive=true;
-			if(p.isActive ) {
-				collectPokemonByPlayer(p);
+			p.isActive = true;
+			if (p.isActive) {
+
+//				if(Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+//					if(inventoryIterator.hasNext()) {
+						if(p.interacted) {
+//							InventoryItem i = inventoryIterator.next();
+							this.inventoryIterator.add(new InventoryItem(p, 1));
+							this.pokeIterator.remove();							
+						}
+
+//					}
+//				}
+				
 				p.tick();
 			}
 		}
-//		throwPokemonByPlayer();
 
-		
-//		for(Pokemon p:pokemons) {
-//			p.tick();
-//		}
+
 		entities.sort(renderSorter);
-	} 
-	
-	public void render(){
+	}
+
+	public void render() {
+		System.out.println("manager calling render");
 		entityIterator = entities.listIterator();
 		pokeIterator = pokemons.listIterator();
-		while(entityIterator.hasNext()){
-			Entity e = entityIterator.next();	
-			
-		if(e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")){
+		inventoryIterator = items.listIterator();
+		while (entityIterator.hasNext()) {
+			Entity e = entityIterator.next();
+
+			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
 				e.render();
 				continue;
 			}
-		if(e.isActive){
+			if (e.isActive) {
 				e.render();
 			}
-			
+
 		}
 
-		while(pokeIterator.hasNext()){
+		while (pokeIterator.hasNext()) {
 			Pokemon p = pokeIterator.next();
-			if(p.isActive ) {
+			if (p.isActive) {
 				p.render();
 			}
 		}
 	}
-	
-	///HEPLER METHODS///
-	public void addEntity(Entity e){
+
+	/// HEPLER METHODS///
+	public void addEntity(Entity e) {
 		entities.add(e);
 		entityIterator = entities.listIterator();
 	}
-	
-	public void removeEntity(Entity e){
+
+	public void removeEntity(Entity e) {
 		entities.remove(e);
 	}
-	
-	public Entity getEntity(float x,float y){//used in removing entities
-		for(Entity e:entities){
-			if(e.getX()<=x && e.getY()<=y && (e.getX()+e.getWidth())>=x && (e.getY()+e.getHeight())>=y){
+
+	public Entity getEntity(float x, float y) {// used in removing entities
+		for (Entity e : entities) {
+			if (e.getX() <= x && e.getY() <= y && (e.getX() + e.getWidth()) >= x && (e.getY() + e.getHeight()) >= y) {
 				return e;
 			}
 		}
 		return null;
 	}
-	
-	///GETTERS AND SETTERS///
-	
+
+	/// GETTERS AND SETTERS///
+
 	public Player getPlayer() {
 		return player;
 	}
@@ -206,8 +225,4 @@ public class EntityManager {
 		return entities;
 	}
 
-	
-	
-	
-	
 }

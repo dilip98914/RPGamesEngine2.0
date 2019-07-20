@@ -29,13 +29,14 @@ public class Player extends Creature {
 //	private float xOld,yOld;
 	private String username;
 	private byte countMP = 0;
-	private ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-	public  ListIterator <InventoryItem> inventoryIterator=items.listIterator();	
+//	private ArrayList<InventoryItem> items;
+//	public  ListIterator <InventoryItem> inventoryIterator;	
 
 	private Inventory inventory;
 	private Item pokemon;
 
-	public Player(Handler handler, float x, float y, String name, String username) {
+	public Player(Handler handler, float x, float y, String name,
+			String username) {
 		super(handler, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, name);
 		bounds.setX(18);
 		bounds.setY(38);
@@ -43,10 +44,12 @@ public class Player extends Creature {
 		bounds.setHeight(12);
 		this.username = username;
 		sheet = Assets.playerSheet;
-		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "1", 4, 0), 1));
-		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "2", 5, 0), 2));
-		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "3", 6, 0), 1));
-		inventory = new Inventory(handler, items);
+		inventory = new Inventory(handler);
+		//means inventory list and iterator are intiliazed
+//		this.inventoryIterator=inventoryIterator;
+//		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "1", 4, 0), 1));
+//		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "2", 5, 0), 2));
+//		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "3", 6, 0), 1));
 	}
 
 //	public void addToInventory(Item i) {
