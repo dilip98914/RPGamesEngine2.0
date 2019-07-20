@@ -18,9 +18,9 @@ public class EntityManager {
 	private Player player;
 	private Pokemon bulbasur;
 
-	public Iterator<Pokemon> pokeIterator;
-	public Iterator<Entity> entityIterator;
-	private ListIterator <InventoryItem> inventoryIterator;	
+	public ListIterator<Pokemon> pokeIterator;
+	public ListIterator<Entity> entityIterator;
+	public  ListIterator <InventoryItem> inventoryIterator;	
 	private ArrayList<Entity> entities;
 	private ArrayList<Pokemon> pokemons;
 	private Comparator<Entity> renderSorter = new Comparator<Entity>(){
@@ -56,11 +56,13 @@ public class EntityManager {
 	}
 	
 	public void initEntities() {
-		entities.add(player);
-		pokemons.add(bulbasur);
-		entityIterator = entities.iterator();
-		pokeIterator= pokemons.iterator();
-		inventoryIterator=player.iterator;
+//		entities.add(player);
+//		pokemons.add(bulbasur);
+		entityIterator = entities.listIterator();
+		pokeIterator= pokemons.listIterator();
+		inventoryIterator=player.inventoryIterator;
+		entityIterator.add(player);
+		pokeIterator.add(bulbasur);
 	}
 	
 	public void collectPokemonByPlayer(Pokemon pokemon0) {
@@ -93,8 +95,8 @@ public class EntityManager {
 
 	
 	public void tick(int xStart,int xEnd,int yStart,int yEnd){
-		entityIterator = entities.iterator();
-		pokeIterator=pokemons.iterator();
+		entityIterator = entities.listIterator();
+		pokeIterator=pokemons.listIterator();
 		while(entityIterator.hasNext()){
 			Entity e = entityIterator.next();
 			
@@ -152,8 +154,8 @@ public class EntityManager {
 	} 
 	
 	public void render(){
-		entityIterator = entities.iterator();
-		pokeIterator = pokemons.iterator();
+		entityIterator = entities.listIterator();
+		pokeIterator = pokemons.listIterator();
 		while(entityIterator.hasNext()){
 			Entity e = entityIterator.next();	
 			
@@ -178,7 +180,7 @@ public class EntityManager {
 	///HEPLER METHODS///
 	public void addEntity(Entity e){
 		entities.add(e);
-		entityIterator = entities.iterator();
+		entityIterator = entities.listIterator();
 	}
 	
 	public void removeEntity(Entity e){

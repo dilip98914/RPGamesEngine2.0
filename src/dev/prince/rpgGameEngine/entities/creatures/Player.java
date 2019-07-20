@@ -9,6 +9,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import dev.prince.rpgGameEngine.Game;
 import dev.prince.rpgGameEngine.Handler;
+import dev.prince.rpgGameEngine.entities.EntityManager;
 import dev.prince.rpgGameEngine.entities.Item;
 import dev.prince.rpgGameEngine.entities.Pokemon;
 import dev.prince.rpgGameEngine.features.Inventory;
@@ -29,7 +30,7 @@ public class Player extends Creature {
 	private String username;
 	private byte countMP = 0;
 	private ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-	public ListIterator<InventoryItem> iterator =  items.listIterator();
+	public  ListIterator <InventoryItem> inventoryIterator=items.listIterator();	
 
 	private Inventory inventory;
 	private Item pokemon;
@@ -42,11 +43,9 @@ public class Player extends Creature {
 		bounds.setHeight(12);
 		this.username = username;
 		sheet = Assets.playerSheet;
-
-		items.add(new InventoryItem(new Pokemon(handler, "pikachu", 0, 0), 2));
-		items.add(new InventoryItem(new Pokemon(handler, "pikachu", 1, 1), 2));
-		items.add(new InventoryItem(new Pokemon(handler, "pikachu", 2, 2), 2));
-
+		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "1", 4, 0), 1));
+		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "2", 5, 0), 2));
+		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "3", 6, 0), 1));
 		inventory = new Inventory(handler, items);
 	}
 

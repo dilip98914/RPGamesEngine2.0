@@ -37,6 +37,7 @@ public class Inventory {
 		x = handler.getWidth() / 2 - width / 2;
 		y = handler.getHeight() / 2 - height / 2;
 
+//		error may be here?
 		currentItem = items.get(0);
 		index = 0;
 		// DEFINE COLOR FLOAT VALUES
