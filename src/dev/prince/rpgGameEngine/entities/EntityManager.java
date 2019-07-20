@@ -3,11 +3,11 @@ package dev.prince.rpgGameEngine.entities;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.entities.creatures.Player;
-import dev.prince.rpgGameEngine.gfx.Assets;
-import dev.prince.rpgGameEngine.inputs.Event;
+import dev.prince.rpgGameEngine.features.InventoryItem;
 import dev.prince.rpgGameEngine.tiles.Tile;
 
 public class EntityManager {
@@ -20,23 +20,22 @@ public class EntityManager {
 
 	public Iterator<Pokemon> pokeIterator;
 	public Iterator<Entity> entityIterator;
+	private ListIterator <InventoryItem> inventoryIterator;	
 	private ArrayList<Entity> entities;
 	private ArrayList<Pokemon> pokemons;
 	private Comparator<Entity> renderSorter = new Comparator<Entity>(){
-		
-		
-	public int compare(Entity a , Entity b){
-			
-			if(a.zIndex < b.zIndex)
-				return -1;
-			if(a.zIndex > b.zIndex)
-				return 1;
-			if(a.getY()+a.getHeight()<b.getY()+b.getHeight()){
-				return -1;
-			}else{
-				return 1;
+		public int compare(Entity a , Entity b){
+				
+				if(a.zIndex < b.zIndex)
+					return -1;
+				if(a.zIndex > b.zIndex)
+					return 1;
+				if(a.getY()+a.getHeight()<b.getY()+b.getHeight()){
+					return -1;
+				}else{
+					return 1;
+				}
 			}
-		}
 		
 	};
 	private boolean added=false;
@@ -61,18 +60,35 @@ public class EntityManager {
 		pokemons.add(bulbasur);
 		entityIterator = entities.iterator();
 		pokeIterator= pokemons.iterator();
+		inventoryIterator=player.iterator;
 	}
 	
 	public void collectPokemonByPlayer(Pokemon pokemon0) {
 		if(pokemon0.interacted) {
 //			System.out.println(pokemon0.interacted);
 			if(!added) {
-				this.player.addToInventory(pokemon0);
+				this.inventoryIterator.add(new InventoryItem(pokemon0, 1));
+//				this.player.addToInventory(pokemon0);
 				added=true;
 			}
 			this.pokeIterator.remove();
 //			pokemon0.interacted=false;
 		}
+	}
+	
+	public void throwPokemonByPlayer() {
+		Pokemon inventoryPokemon=(Pokemon)player.getInventory().currentItem.item;
+		
+		while(inventoryIterator.hasNext()){
+			InventoryItem e = inventoryIterator.next();
+			if(e.item.throwIt) {
+				System.out.println("calling");
+//				this.player.removeFromInventory(inventoryPokemon);
+				inventoryIterator.remove();
+				e.item.throwIt=false;
+			}
+		}
+		
 	}
 
 	
@@ -106,6 +122,7 @@ public class EntityManager {
 				e.tick();
 			}
 			
+			
 		}
 //
 		
@@ -125,6 +142,7 @@ public class EntityManager {
 				p.tick();
 			}
 		}
+//		throwPokemonByPlayer();
 
 		
 //		for(Pokemon p:pokemons) {

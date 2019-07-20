@@ -22,9 +22,10 @@ public class Inventory {
 
 	private float[] selectedColor;
 
-	private ArrayList<InventoryItem> items;
+	public ArrayList<InventoryItem> items;
 	public InventoryItem currentItem;
 	public int index;
+//	public boolean throwCurretItem=false;
 
 	public Inventory(Handler handler, ArrayList<InventoryItem> items) {
 		this.handler = handler;
@@ -54,9 +55,11 @@ public class Inventory {
 			}
 		} else if (key.contains("w")) {
 			index--;
-			if (index <= 0) {
+			if (index <0) {
 				index = items.size() - 1;
 			}
+		}else if(key.contains("q")) {
+			currentItem.item.throwIt=true;
 		}
 	}
 

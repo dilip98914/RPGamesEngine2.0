@@ -31,6 +31,11 @@ public class Pokemon extends Item{
 		};
 	}
 	
+	public void setCoords(float xt,float yt) {
+		this.x=xt;
+		this.y=yt;
+	}
+	
 	public boolean checkInteractionWith(Entity e) {
 		if(this.getCollisionBounds(0f, 0f).intersects(handler.getPlayer().getCollisionBounds(0f,0f))) {
 			return true;
