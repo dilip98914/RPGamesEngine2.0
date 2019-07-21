@@ -24,7 +24,6 @@ public class Inventory {
 	private float[] selectedColor;
 
 	public ArrayList<InventoryItem> items;
-	public ListIterator<InventoryItem> inventoryIterator;
 
 	public InventoryItem currentItem;
 	public int index = 0;
@@ -32,30 +31,20 @@ public class Inventory {
 
 	public Inventory(Handler handler) {
 		this.handler = handler;
-//		this.items = items;
-//		this.inventoryIterator=inventoryIterator;
 		// DEFINE WIDTH AND HEIGHT
 		width = handler.getWidth() - 2 * (10 * X_OFFSET);
 		height = Y_OFFSET + Fonts.font.getHeight("ANYTHING") * displayQuantity + displayQuantity * Y_OFFSET + Y_OFFSET;
 		x = handler.getWidth() / 2 - width / 2;
 		y = handler.getHeight() / 2 - height / 2;
 
-//		error may be here?
-//		currentItem = items.get(0);
-//		index = 0;
+		index = 0;
+//		currentItem = items.get(index );
+		
 		// DEFINE COLOR FLOAT VALUES
 		selectedColor = new float[] { 1, 0, 0, 0.8f };
+		items=new ArrayList<InventoryItem>();
 	}
 
-	public void setInventory(ListIterator<InventoryItem> inventoryIterator) {
-		this.inventoryIterator=inventoryIterator;
-	}
-	
-	public void setList(ArrayList<InventoryItem> items) {
-		this.items=items;
-	}
-	
-	
 	/* still neater way to handle events in each file */
 	public void getEvents() {
 //			System.out.println(EventManager.getInput(true));
@@ -145,36 +134,23 @@ public class Inventory {
 		int constY = 10;
 		int yOff = 0;
 		float alpha = 0.6f;
-//		for (InventoryItem item : items) {
+		System.out.println(items.size());
+		for(int i=0;i<items.size();i++) {
+			InventoryItem item=items.get(i);
+			
 //			if (item == currentItem) {
 //				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
 //			} else {
 //				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
 //			}
-//			Renderer.renderQuad(x + constX1, (y + yOff), 200, 39);
-//
-//			item.item.render(x + constX1, (y + yOff) + constY, 40, 40);
-//			Renderer.renderString(x + constX2 / 2, (y + yOff) + constY, "-", Color.white, true);
-//			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(item.quantity), Color.white, true);
-//			yOff += 40;
-//		}
 
-		while (inventoryIterator.hasNext()) {
-//			System.out.println("here");
-			InventoryItem item = inventoryIterator.next();
-//			if (item == currentItem) {
-//				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
-//			} else {
-//				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
-//			}
 			Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
 			Renderer.renderQuad(x + constX1, (y + yOff), 200, 39);
-			
+
 			item.item.render(x + constX1, (y + yOff) + constY, 40, 40);
 			Renderer.renderString(x + constX2 / 2, (y + yOff) + constY, "-", Color.white, true);
 			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(item.quantity), Color.white, true);
 			yOff += 40;
-
 		}
 
 	}
