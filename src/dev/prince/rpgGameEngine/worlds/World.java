@@ -219,6 +219,8 @@ public class World {
 	public void loadEntity(){	
 		
 		entityManager.getEntities().removeAll(entityManager.getEntities());
+		entityManager.items.removeAll(entityManager.items);
+
 //		entityManager.addEntity(player);
 		entityManager.initEntities();
 		if(Game.isServer){

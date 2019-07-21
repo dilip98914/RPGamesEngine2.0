@@ -21,7 +21,7 @@ public class EntityManager {
 	private Pokemon bulbasur;
 
 	private ArrayList<Entity> entities;
-	private ArrayList<InventoryItem> items;
+	public ArrayList<InventoryItem> items;
 
 	private Comparator<Entity> renderSorter = new Comparator<Entity>() {
 		public int compare(Entity a, Entity b) {
@@ -49,7 +49,6 @@ public class EntityManager {
 
 	public EntityManager(Handler handler, Player player) {
 		this.handler = handler;
-
 		this.player = player;
 		bulbasur = new Pokemon(handler, 629, 189, 40, 40, "idk", 0, 0);
 
@@ -113,10 +112,10 @@ public class EntityManager {
 			 */
 			checkEntityIsActive(e, xStart, xEnd, yStart, yEnd);
 
-			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
-				e.tick();
-				continue;
-			}
+//			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
+//				e.tick();
+//				continue;
+//			}
 
 			if (e.isActive) {
 				e.tick();
@@ -130,10 +129,10 @@ public class EntityManager {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			
-			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
-				e.render();
-				continue;
-			}
+//			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
+//				e.render();
+//				continue;
+//			}
 			if (e.isActive) {
 				e.render();
 			}

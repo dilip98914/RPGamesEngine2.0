@@ -29,8 +29,6 @@ public class Player extends Creature {
 //	private float xOld,yOld;
 	private String username;
 	private byte countMP = 0;
-//	private ArrayList<InventoryItem> items;
-//	public  ListIterator <InventoryItem> inventoryIterator;	
 
 	private Inventory inventory;
 	private Item pokemon;
@@ -45,21 +43,7 @@ public class Player extends Creature {
 		this.username = username;
 		sheet = Assets.playerSheet;
 		inventory = new Inventory(handler);
-		//means inventory list and iterator are intiliazed
-//		this.inventoryIterator=inventoryIterator;
-//		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "1", 4, 0), 1));
-//		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "2", 5, 0), 2));
-//		inventoryIterator.add(new InventoryItem(new Pokemon(handler, "3", 6, 0), 1));
 	}
-
-//	public void addToInventory(Item i) {
-////		iterator.ad
-//		items.add(new InventoryItem(i, 1));
-//	}
-
-//	public void removeFromInventory(Item i) {
-//		iterator.remove();
-//	}
 
 	@Override
 	public void tick() {
