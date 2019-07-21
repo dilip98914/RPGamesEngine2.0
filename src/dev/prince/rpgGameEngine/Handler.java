@@ -1,5 +1,6 @@
 package dev.prince.rpgGameEngine;
 
+import dev.prince.rpgGameEngine.entities.EntityManager;
 import dev.prince.rpgGameEngine.entities.creatures.Player;
 import dev.prince.rpgGameEngine.features.Clock;
 import dev.prince.rpgGameEngine.gfx.GameCamera;
@@ -93,6 +94,9 @@ public class Handler {
 	
 	public Clock getClock(){
 		return game.getGameState().getClock();
+	}
+	public EntityManager getEntityManager() {
+		return world.getEntityManager();
 	}
 		 
 }

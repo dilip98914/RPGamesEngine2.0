@@ -1,13 +1,13 @@
 package dev.prince.rpgGameEngine.features;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 
 import dev.prince.rpgGameEngine.Handler;
-import dev.prince.rpgGameEngine.entities.Item;
+import dev.prince.rpgGameEngine.entities.EntityManager;
+import dev.prince.rpgGameEngine.entities.Pokemon;
 import dev.prince.rpgGameEngine.fonts.Fonts;
 import dev.prince.rpgGameEngine.gfx.Renderer;
 import dev.prince.rpgGameEngine.inputs.Event;
@@ -61,16 +61,55 @@ public class Inventory {
 			if (index < 0) {
 				index = items.size() - 1;
 			}
-		} 
-//		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-//			throwEvent=true;
-//		}
+		}else if (EventManager.value == Keyboard.KEY_Q) {
+//			index--;
+//			if (index < 0) {
+//				index = items.size() - 1;
+//			}
+			throwEvent=true;
+			EventManager.value=0;
+		}  
 	}
 
+	public void addToInventory(Pokemon ii) {
+		ii.inMap=false;
+		ii.inInventory=true;
+		this.items.add(new InventoryItem(ii, 1));
+	}
+	
+	public void removeFromInventory(Pokemon ii) {
+		for(int i=0;i<items.size();i++) {
+			InventoryItem it=items.get(i);
+			Pokemon p=(Pokemon) it.item;
+			if(ii==p) {
+				ii.inMap=true;
+				ii.inInventory=false;
+			}
+		}
+	}
+	
+	public void addToPokemons(EntityManager em,Pokemon p) {
+		p.inInventory=false;
+		p.inMap=true;
+		em.pokemons.add(p);
+	}
+	
+	public void removeFromPokemons(EntityManager em,Pokemon p) {
+		ArrayList<Pokemon> pokemons=em.pokemons;
+		for(int i=0;i<pokemons.size();i++) {
+			Pokemon it=pokemons.get(i);
+			if(it==p) {
+				p.inMap=false;
+				p.inInventory=true;
+			}
+		}
+	}
+	
+	
 	public void tick(Event[] events) {
 		getEvents();
-		throwEvent=EventManager.Q_PRESSED;
 		if(items.size()>0 && index>=0) {
+			System.out.println(index+" index");
 			currentItem = items.get(index );
 		}
 

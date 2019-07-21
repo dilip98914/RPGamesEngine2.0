@@ -12,6 +12,7 @@ public class DisplayClass {
 		try {
 			Display.setDisplayMode(new DisplayMode(width,height));
 			Display.setTitle(title);
+			Display.setLocation(0, 0);
 			//ResolutionManager.changeResolution(width, height, !Display.isFullscreen());
 			Display.create();
 			//DIsplay.c

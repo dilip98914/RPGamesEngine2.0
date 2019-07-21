@@ -2,13 +2,10 @@ package dev.prince.rpgGameEngine.entities;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.ListIterator;
-
-import org.lwjgl.input.Keyboard;
 
 import dev.prince.rpgGameEngine.Handler;
 import dev.prince.rpgGameEngine.entities.creatures.Player;
+import dev.prince.rpgGameEngine.features.Inventory;
 import dev.prince.rpgGameEngine.features.InventoryItem;
 import dev.prince.rpgGameEngine.tiles.Tile;
 
@@ -20,9 +17,13 @@ public class EntityManager {
 	private Player player;
 	private Pokemon bulbasur;
 
+	private Inventory inventory;
+	
 	public ArrayList<Pokemon> pokemons;
 	public ArrayList<Entity> entities;
 	public ArrayList<InventoryItem> items;
+	
+	private Pokemon testItem1,testItem2,testItem3;
 
 	private Comparator<Entity> renderSorter = new Comparator<Entity>() {
 		public int compare(Entity a, Entity b) {
@@ -50,34 +51,50 @@ public class EntityManager {
 	public EntityManager(Handler handler, Player player) {
 		this.handler = handler;
 		this.player = player;
-		bulbasur = new Pokemon(handler, 629, 225, 40, 40, "idk", 0, 0);
+		bulbasur = new Pokemon(handler, 629, 225, 40, 40, "bulbasur", 0, 0);
 		entities = new ArrayList<Entity>();
 		pokemons = new ArrayList<Pokemon>();
 		items = this.player.getInventory().items;
-
+		inventory=player.getInventory();
 	}
 
 	public void initEntities() {
 		entities.add(player);
-		pokemons.add(bulbasur);
-		items.add(new InventoryItem(new Pokemon(handler, 529, 289, 40, 40, "idk2", 4, 6), 1));
-		items.add(new InventoryItem(new Pokemon(handler, 529, 189, 40, 40, "idk2", 5, 6), 3));
+		
+		testItem1=new Pokemon(handler, 550, 450, 40, 40, "electrode", 4, 6);
+		testItem2=new Pokemon(handler, 550, 350, 40, 40, "tripleHead", 6, 6);
+		testItem3=new Pokemon(handler, 550, 550, 40, 40, "hypno", 0, 6);
 
+		
+		inventory.addToPokemons(this,bulbasur);
+		
+		inventory.addToInventory(testItem1);
+		inventory.addToInventory(testItem2);
+		inventory.addToInventory(testItem3);
+		
+		
 	}
 
 	public void collectPokemonByPlayer(Pokemon pp) {
 		if (pp.interacted) {
-			if (!pp.addedToInventory) {
-				this.items.add(new InventoryItem(pp, 1));
-				pp.addedToInventory = true;
-				pp.addedToMap = false;
-
-			}
-			pp.interacted = false;
+			inventory.addToInventory(pp);
+			inventory.removeFromPokemons(this,pp);
+			pp.interacted=false;
 		}
 
 	}
 
+	public void throwPokemonByPlayer() {
+		if (player.getInventory().throwEvent) {
+			Pokemon currPokemon=(Pokemon)inventory.currentItem.item;
+			inventory.addToPokemons(this,currPokemon);
+			inventory.removeFromInventory(currPokemon);
+			player.getInventory().throwEvent=false;
+
+		}
+	}
+
+	
 //	private void deleteAllEntities(ArrayList<Entity> entities) {
 //		for (int i = 0; i < entities.size(); i++) {
 //			Entity e = entities.get(i);
@@ -91,7 +108,7 @@ public class EntityManager {
 	private void deleteAllPokemon(ArrayList<Pokemon> pokemons) {
 		for (int i = 0; i < pokemons.size(); i++) {
 			Pokemon e = pokemons.get(i);
-			if (e.addedToInventory) {
+			if (!e.inMap) {
 				pokemons.remove(i--);
 			}
 		}
@@ -99,37 +116,16 @@ public class EntityManager {
 	}
 
 	private void deleteAllItems(ArrayList<InventoryItem> items) {
-//		System.out.println("size: "+items.size());
 		for (int i = 0; i < items.size(); i++) {
 			InventoryItem e = items.get(i);
-			if (e.item.addedToMap) {
-//				System.out.println("i beofer"+i);
+			if (!e.item.inInventory) {
 				items.remove(i--);
-//				System.out.println("i after"+i);
-//				this.player.getInventory().index=i;
-//				this.player.getInventory().currentItem=items.get(i);
-//				if(this.player.getInventory().index>=1) {
-//					this.player.getInventory().index--;	
-//				}
 			}
 		}
 
 	}
 
-	public void throwPokemonByPlayer() {
-		if (player.getInventory().throwEvent) {
-			Pokemon currPokemon = (Pokemon) player.getInventory().currentItem.item;
-			if(!currPokemon.addedToMap) {
-				currPokemon.addedToMap=true;
-				pokemons.add(currPokemon);
-				currPokemon.addedToInventory=false;
-			}
-			player.getInventory().throwEvent=false;
-
-
-		}
-	}
-
+	
 	private void checkEntityIsActive(Entity e, int xStart, int xEnd, int yStart, int yEnd) {
 		if ((e.getX() + e.getWidth() > xStart * Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH)
 				&& (e.getY() + e.getHeight() > yStart * Tile.TILEHEIGHT) && (e.getY() < yEnd * Tile.TILEHEIGHT)) {
@@ -141,6 +137,9 @@ public class EntityManager {
 	}
 
 	public void tick(int xStart, int xEnd, int yStart, int yEnd) {
+		System.out.println(" pokemons : "+pokemons.size());
+		System.out.println(" items : "+items.size());
+		
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			checkEntityIsActive(e, xStart, xEnd, yStart, yEnd);
