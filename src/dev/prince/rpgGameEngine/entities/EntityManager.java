@@ -73,7 +73,7 @@ public class EntityManager {
 				pp.addedToMap = false;
 
 			}
-//			pp.interacted = false;
+			pp.interacted = false;
 		}
 
 	}
@@ -119,22 +119,14 @@ public class EntityManager {
 	public void throwPokemonByPlayer() {
 		if (player.getInventory().throwEvent) {
 			Pokemon currPokemon = (Pokemon) player.getInventory().currentItem.item;
-			
-			for (int i = 0; i < items.size(); i++) {
-				
-				InventoryItem e = items.get(i);
-				Pokemon p = (Pokemon) e.item;
-				System.out.println("reached");
-
-
-				if (e.item == currPokemon && !p.addedToMap) {
-					p.addedToMap=true;
-					pokemons.add(p);
-					p.addedToInventory=false;
-				}
-				player.getInventory().throwEvent=false;
-				return;
+			if(!currPokemon.addedToMap) {
+				currPokemon.addedToMap=true;
+				pokemons.add(currPokemon);
+				currPokemon.addedToInventory=false;
 			}
+			player.getInventory().throwEvent=false;
+
+
 		}
 	}
 
@@ -149,7 +141,6 @@ public class EntityManager {
 	}
 
 	public void tick(int xStart, int xEnd, int yStart, int yEnd) {
-
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			checkEntityIsActive(e, xStart, xEnd, yStart, yEnd);

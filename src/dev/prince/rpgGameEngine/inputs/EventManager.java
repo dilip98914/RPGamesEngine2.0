@@ -8,7 +8,10 @@ public class EventManager {
 	private Handler handler;
 	public static String letter="";
 	public static int value;
+	public static boolean Q_PRESSED=false;
 
+	
+	
 	
 	public EventManager(Handler handler) {
 		this.handler=handler;
@@ -33,6 +36,12 @@ public class EventManager {
 		if((Keyboard.getEventCharacter()) != 0) {
 			letter=String.valueOf(Keyboard.getEventCharacter());
 	        value = Keyboard.getEventKey();
+	        if(value==Keyboard.KEY_Q) {
+	        	Q_PRESSED=true;
+	        }
+//	        else {
+//	        	Q_PRESSED=false;
+//	        }
 		}
 	}
 	

@@ -3,6 +3,7 @@ package dev.prince.rpgGameEngine.features;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 
 import dev.prince.rpgGameEngine.Handler;
@@ -60,15 +61,16 @@ public class Inventory {
 			if (index < 0) {
 				index = items.size() - 1;
 			}
-		} else if (key.contains("q")) {
-//			currentItem.item.throwIt = true;
-			throwEvent=true;
-		}
+		} 
+//		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+//			throwEvent=true;
+//		}
 	}
 
 	public void tick(Event[] events) {
 		getEvents();
-		if(items.size()>0) {
+		throwEvent=EventManager.Q_PRESSED;
+		if(items.size()>0 && index>=0) {
 			currentItem = items.get(index );
 		}
 
