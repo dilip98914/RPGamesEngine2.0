@@ -71,40 +71,6 @@ public class Inventory {
 		}  
 	}
 
-	public void addToInventory(Pokemon ii) {
-		ii.inMap=false;
-		ii.inInventory=true;
-		this.items.add(new InventoryItem(ii, 1));
-	}
-	
-	public void removeFromInventory(Pokemon ii) {
-		for(int i=0;i<items.size();i++) {
-			InventoryItem it=items.get(i);
-			Pokemon p=(Pokemon) it.item;
-			if(ii==p) {
-				ii.inMap=true;
-				ii.inInventory=false;
-			}
-		}
-	}
-	
-	public void addToPokemons(EntityManager em,Pokemon p) {
-		p.inInventory=false;
-		p.inMap=true;
-		em.pokemons.add(p);
-	}
-	
-	public void removeFromPokemons(EntityManager em,Pokemon p) {
-		ArrayList<Pokemon> pokemons=em.pokemons;
-		for(int i=0;i<pokemons.size();i++) {
-			Pokemon it=pokemons.get(i);
-			if(it==p) {
-				p.inMap=false;
-				p.inInventory=true;
-			}
-		}
-	}
-	
 	
 	public void tick(Event[] events) {
 		getEvents();

@@ -30,8 +30,7 @@ public abstract class Entity {
 	public static ArrayList<String> classes;
 
 	protected String name;
-	public boolean inMap=false;
-	public boolean inInventory=false;
+	public boolean added=false;
 
 	public Entity(Handler handler, float x, float y, float width, float height, String name) {
 		this.handler = handler;
