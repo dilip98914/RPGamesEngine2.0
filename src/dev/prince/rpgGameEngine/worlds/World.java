@@ -135,7 +135,7 @@ public class World {
 	}
 	
 	//LOADER METHODS
-	
+//	TODO:fix world loading
 	public void loadWorld(String path){
 			this.worldPath=path;
 					
@@ -218,7 +218,8 @@ public class World {
 	
 	public void loadEntity(){	
 		
-		entityManager.getEntities().removeAll(entityManager.getEntities());
+		entityManager.entities.removeAll(entityManager.entities);
+		entityManager.pokemons.removeAll(entityManager.pokemons);
 		entityManager.items.removeAll(entityManager.items);
 
 //		entityManager.addEntity(player);

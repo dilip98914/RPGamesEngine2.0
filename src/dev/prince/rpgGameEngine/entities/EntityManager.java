@@ -20,7 +20,8 @@ public class EntityManager {
 	private Player player;
 	private Pokemon bulbasur;
 
-	private ArrayList<Entity> entities;
+	public ArrayList<Pokemon> pokemons;
+	public ArrayList<Entity> entities;
 	public ArrayList<InventoryItem> items;
 
 	private Comparator<Entity> renderSorter = new Comparator<Entity>() {
@@ -38,7 +39,6 @@ public class EntityManager {
 		}
 
 	};
-	private boolean added = false;
 
 	public boolean playerTouchesItem(Entity e, int xOffset, int yOffset) {
 		if (this.player.getCollisionBounds(0f, 0f).intersects(e.getCollisionBounds(xOffset, yOffset))) {
@@ -50,47 +50,93 @@ public class EntityManager {
 	public EntityManager(Handler handler, Player player) {
 		this.handler = handler;
 		this.player = player;
-		bulbasur = new Pokemon(handler, 629, 189, 40, 40, "idk", 0, 0);
-
+		bulbasur = new Pokemon(handler, 629, 225, 40, 40, "idk", 0, 0);
 		entities = new ArrayList<Entity>();
+		pokemons = new ArrayList<Pokemon>();
 		items = this.player.getInventory().items;
 
 	}
 
 	public void initEntities() {
 		entities.add(player);
-		entities.add(bulbasur);
-		items.add(new InventoryItem(bulbasur, 1));
+		pokemons.add(bulbasur);
+		items.add(new InventoryItem(new Pokemon(handler, 529, 289, 40, 40, "idk2", 4, 6), 1));
+		items.add(new InventoryItem(new Pokemon(handler, 529, 189, 40, 40, "idk2", 5, 6), 3));
 
 	}
-//
-//	public void collectPokemonByPlayer(Pokemon pokemon0) {
-//		if (pokemon0.interacted) {
-////			System.out.println(pokemon0.interacted);
-//			if (!added) {
-//				this.inventoryIterator.add(new InventoryItem(pokemon0, 1));
-////				this.player.addToInventory(pokemon0);
-//				added = true;
+
+	public void collectPokemonByPlayer(Pokemon pp) {
+		if (pp.interacted) {
+			if (!pp.addedToInventory) {
+				this.items.add(new InventoryItem(pp, 1));
+				pp.addedToInventory = true;
+				pp.addedToMap = false;
+
+			}
+//			pp.interacted = false;
+		}
+
+	}
+
+//	private void deleteAllEntities(ArrayList<Entity> entities) {
+//		for (int i = 0; i < entities.size(); i++) {
+//			Entity e = entities.get(i);
+//			if (e.removed) {
+//				entities.remove(i--);
 //			}
-//			this.pokeIterator.remove();
-////			pokemon0.interacted=false;
 //		}
+//
 //	}
 
-//	public void throwPokemonByPlayer() {
-//		Pokemon inventoryPokemon = (Pokemon) player.getInventory().currentItem.item;
-//
-//		while (inventoryIterator.hasNext()) {
-//			InventoryItem e = inventoryIterator.next();
-//			if (e.item.throwIt) {
-//				System.out.println("calling");
-////				this.player.removeFromInventory(inventoryPokemon);
-//				inventoryIterator.remove();
-//				e.item.throwIt = false;
-//			}
-//		}
-//
-//	}
+	private void deleteAllPokemon(ArrayList<Pokemon> pokemons) {
+		for (int i = 0; i < pokemons.size(); i++) {
+			Pokemon e = pokemons.get(i);
+			if (e.addedToInventory) {
+				pokemons.remove(i--);
+			}
+		}
+
+	}
+
+	private void deleteAllItems(ArrayList<InventoryItem> items) {
+//		System.out.println("size: "+items.size());
+		for (int i = 0; i < items.size(); i++) {
+			InventoryItem e = items.get(i);
+			if (e.item.addedToMap) {
+//				System.out.println("i beofer"+i);
+				items.remove(i--);
+//				System.out.println("i after"+i);
+//				this.player.getInventory().index=i;
+//				this.player.getInventory().currentItem=items.get(i);
+//				if(this.player.getInventory().index>=1) {
+//					this.player.getInventory().index--;	
+//				}
+			}
+		}
+
+	}
+
+	public void throwPokemonByPlayer() {
+		if (player.getInventory().throwEvent) {
+			Pokemon currPokemon = (Pokemon) player.getInventory().currentItem.item;
+			
+			for (int i = 0; i < items.size(); i++) {
+				
+				InventoryItem e = items.get(i);
+				Pokemon p = (Pokemon) e.item;
+				System.out.println("reached");
+
+
+				if (e.item == currPokemon && !p.addedToMap) {
+					p.addedToMap=true;
+					pokemons.add(p);
+					p.addedToInventory=false;
+				}
+				player.getInventory().throwEvent=false;
+				return;
+			}
+		}
+	}
 
 	private void checkEntityIsActive(Entity e, int xStart, int xEnd, int yStart, int yEnd) {
 		if ((e.getX() + e.getWidth() > xStart * Tile.TILEWIDTH) && (e.getX() < xEnd * Tile.TILEWIDTH)
@@ -106,12 +152,7 @@ public class EntityManager {
 
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
-			/*
-			 * if(e instanceof Pokemon) { Pokemon ee=(Pokemon)e; collectPokemonByPlayer(ee);
-			 * }else { }
-			 */
 			checkEntityIsActive(e, xStart, xEnd, yStart, yEnd);
-
 //			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
 //				e.tick();
 //				continue;
@@ -122,17 +163,39 @@ public class EntityManager {
 			}
 		}
 
-		entities.sort(renderSorter);
+		for (int i = 0; i < pokemons.size(); i++) {
+			Pokemon e = pokemons.get(i);
+			checkEntityIsActive(e, xStart, xEnd, yStart, yEnd);
+			if (e.isActive) {
+				collectPokemonByPlayer(e);
+				e.tick();
+			}
+		}
+		throwPokemonByPlayer();
+
+//		deleteAllEntities(entities);
+		deleteAllPokemon(pokemons);
+		deleteAllItems(items);
+//		entities.sort(renderSorter);
 	}
 
 	public void render() {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
-			
+
 //			if (e.equals(player) || e.getClass().getSimpleName().equalsIgnoreCase("PlayerMP")) {
 //				e.render();
 //				continue;
 //			}
+			if (e.isActive) {
+				e.render();
+			}
+
+		}
+
+		for (int i = 0; i < pokemons.size(); i++) {
+			Pokemon e = pokemons.get(i);
+
 			if (e.isActive) {
 				e.render();
 			}
@@ -163,10 +226,6 @@ public class EntityManager {
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	public ArrayList<Entity> getEntities() {
-		return entities;
 	}
 
 }

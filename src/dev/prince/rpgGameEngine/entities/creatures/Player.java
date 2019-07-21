@@ -50,7 +50,7 @@ public class Player extends Creature {
 		handler.getGameState();
 		if (!GameState.prompt.focused)
 			getInput();
-		interact();
+//		interact();
 
 		if (EventManager.value == Keyboard.KEY_E && !GameState.prompt.focused) {
 			useInventory = !useInventory;
@@ -196,14 +196,14 @@ public class Player extends Creature {
 
 	}
 
-	public void interact() {
-		if (interact) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_F) && this.direction == 0) {
-				System.out.println("INTERACT");
-				interact = false;
-			}
-		}
-	}
+//	public void interact() {
+//		if (interact) {
+//			if (Keyboard.isKeyDown(Keyboard.KEY_F) && this.direction == 0) {
+//				System.out.println("INTERACT");
+//				interact = false;
+//			}
+//		}
+//	}
 
 	public Inventory getInventory() {
 		return inventory;

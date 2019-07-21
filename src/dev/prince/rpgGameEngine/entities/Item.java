@@ -11,7 +11,6 @@ public class Item extends Entity {
 	
 	protected float[] imageData;
 	protected Texture texture;
-	public boolean throwIt=false;
 	
 	public Item(Handler handler, float x, float y, float width, float height,String name,
 			float[] imageData0,Texture texture0) {

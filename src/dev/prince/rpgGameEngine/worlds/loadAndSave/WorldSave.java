@@ -93,7 +93,7 @@ public class WorldSave {
 		try {
 			FileWriter fw = new FileWriter(new File(handler.getWorld().getWorldPath().substring(0, handler.getWorld().getWorldPath().length()-5)+"entity"));
 			
-			for(Entity e:handler.getWorld().getEntityManager().getEntities()){		
+			for(Entity e:handler.getWorld().getEntityManager().entities){		
 				if(!e.equals(handler.getWorld().getEntityManager().getPlayer())){
 					fw.append(e.getClass().getSimpleName()+" ");
 	

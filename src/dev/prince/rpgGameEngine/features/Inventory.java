@@ -27,6 +27,7 @@ public class Inventory {
 
 	public InventoryItem currentItem;
 	public int index = 0;
+	public boolean throwEvent=false;
 //	public boolean throwCurretItem=false;
 
 	public Inventory(Handler handler) {
@@ -38,7 +39,6 @@ public class Inventory {
 		y = handler.getHeight() / 2 - height / 2;
 
 		index = 0;
-//		currentItem = items.get(index );
 		
 		// DEFINE COLOR FLOAT VALUES
 		selectedColor = new float[] { 1, 0, 0, 0.8f };
@@ -62,11 +62,16 @@ public class Inventory {
 			}
 		} else if (key.contains("q")) {
 //			currentItem.item.throwIt = true;
+			throwEvent=true;
 		}
 	}
 
 	public void tick(Event[] events) {
 		getEvents();
+		if(items.size()>0) {
+			currentItem = items.get(index );
+		}
+
 //		this.inventoryIterator=handler.ge;
 
 		// Set Values
@@ -104,8 +109,6 @@ public class Inventory {
 	}
 
 	public void render() {
-		System.out.println("inventory calling render");
-
 		TextArea.renderTextArea(handler.getWidth() / 2 - Fonts.fontBig.getWidth(title) / 2,
 				y - TextArea.getyOffset() * 2 - Fonts.fontBig.getHeight("I"), title, Color.white,
 				new float[] { 0, 0, 0, 0 }, new float[] { 0, 0, 0, 0 }, true, -1, -1);
@@ -134,17 +137,16 @@ public class Inventory {
 		int constY = 10;
 		int yOff = 0;
 		float alpha = 0.6f;
-		System.out.println(items.size());
+		
 		for(int i=0;i<items.size();i++) {
 			InventoryItem item=items.get(i);
 			
-//			if (item == currentItem) {
-//				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
-//			} else {
-//				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
-//			}
+			if (item == currentItem) {
+				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
+			} else {
+				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
+			}
 
-			Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
 			Renderer.renderQuad(x + constX1, (y + yOff), 200, 39);
 
 			item.item.render(x + constX1, (y + yOff) + constY, 40, 40);
