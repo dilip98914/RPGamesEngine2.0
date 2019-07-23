@@ -19,36 +19,36 @@ public class GameState extends State {
 	private World world;
 	private WorldCreationState gameCreationState;
 	private Color DARK_GRAY = Color.darkGray.darker();
-	public static boolean createWorld = false, toMenu = false, save = false,
-			shouldDialogue;
+	public static boolean createWorld = false, toMenu = false, save = false, shouldDialogue;
 	public static UIPrompt prompt;
 //	public static Chat chat;
 	private float fadeValue = 1.0f, fadeMagnitude = 0f;
 
-	public static String[] locations=Utils.loadFileAsString("res/worlds/saveFile.sav").split("\\s+");
-	public static String currentLocation=locations[0];
-	public static String currentLevel=locations[1];
-	public static String worldPath="res/worlds/"+ currentLocation + "/";
+	public static String[] locations = Utils.loadFileAsString("res/worlds/saveFile.sav").split("\\s+");
+	public static String currentLocation = locations[0];
+	public static String currentLevel = locations[1];
+	public static String worldPath = "res/worlds/" + currentLocation + "/";
 	private Clock clock;
+	private CombatState combatState;
 
-	int promptLocX=20;
-	int promptLocY=handler.getHeight() - 40;
-	
-	
+	int promptLocX = 20;
+	int promptLocY = handler.getHeight() - 40;
+
 	public GameState(Handler handler) {
 		super(handler);
+		combatState=new CombatState(handler);
 		clock = new Clock(handler);
-		world = new World(handler,worldPath+ currentLevel);
+		world = new World(handler, worldPath + currentLevel);
 		handler.setWorld(world);
 		gameCreationState = new WorldCreationState(handler);
-		prompt = new UIPrompt(handler, promptLocX,promptLocY);
+		prompt = new UIPrompt(handler, promptLocX, promptLocY);
 	}
 
 	@Override
 	public void tick() {
 		clock.tick(0);
 		world.tick();
-		
+
 		// COMMANDS
 		promptCommands();
 		keyCommands();
@@ -80,46 +80,36 @@ public class GameState extends State {
 		if (fadeMagnitude >= 1) {
 			fadeValue = 1f;
 			save = false;
-			DARK_GRAY= Color.darkGray.darker();
+			DARK_GRAY = Color.darkGray.darker();
 			fadeMagnitude = 0f;
 		}
 
-//		flint.render();
-		
-		//inventory
-//		if (handler.getWorld().getEntityManager().getPlayer().isUseInventory()) {
-//			handler.getWorld().getEntityManager().getPlayer().getInventory()
-//					.render();
-//		}
-		
 		prompt.render();
 //		chat.render();
-				
-		
-		//if no commands recognized
-		if(Keyboard.isKeyDown(Keyboard.KEY_RETURN)){
-			if(prompt.getPromptText().startsWith("/")){
-				
+
+		// if no commands recognized
+		if (Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
+			if (prompt.getPromptText().startsWith("/")) {
+
 				boolean noMatch = true;
-				
-				for(int i =0;i<gameCreationState.getCommands().length;i++){
-					if(gameCreationState.getCommands()[i].equalsIgnoreCase(prompt.getPromptText())){
+
+				for (int i = 0; i < gameCreationState.getCommands().length; i++) {
+					if (gameCreationState.getCommands()[i].equalsIgnoreCase(prompt.getPromptText())) {
 						noMatch = false;
 //						chat.addText("<" + gameCreationState.getExecutions()[i] + ">");
 					}
-				
+
 				}
 //				if(noMatch)
 //					chat.addText("<Can't recognize the command! Did u try right clicking after it?>");
-			}else{
+			} else {
 //				if(!prompt.getPromptText().equalsIgnoreCase(""))
 //					chat.addText("[Player]" + handler.getPlayer().getUsername() + ">> " +prompt.getPromptText());
-				
+
 			}
-			
+
 		}
-		
-		
+
 	}
 
 	public void renderDialogue(String message) {
@@ -130,31 +120,28 @@ public class GameState extends State {
 
 		// RENDER QUAD
 		Renderer.setColor(1, 1, 1, 1);
-		Renderer.renderQuad(xOffset, handler.getHeight() - height - yOffset,
-				width, height);
+		Renderer.renderQuad(xOffset, handler.getHeight() - height - yOffset, width, height);
 		// RENDER OULINE
 		Renderer.setColor(0, 0, 0, 1);
-		Renderer.renderOutlineOfQuad(xOffset, handler.getHeight() - height
-				- yOffset, width, height);
+		Renderer.renderOutlineOfQuad(xOffset, handler.getHeight() - height - yOffset, width, height);
 
 		// RENDER FONT
 
-		Renderer.renderString(2 * xOffset, handler.getHeight() - height,
-				message, Color.black, false);
+		Renderer.renderString(2 * xOffset, handler.getHeight() - height, message, Color.black, false);
 	}
 
 	// DIFFERENT COMMANDS
 	public void promptCommands() {
 
-		if (((GameState.prompt.getPromptText().equalsIgnoreCase("/save")) && EventManager.value == Keyboard.KEY_RETURN)) {
+		if (((GameState.prompt.getPromptText().equalsIgnoreCase("/save"))
+				&& EventManager.value == Keyboard.KEY_RETURN)) {
 			save = true;
 			gameCreationState.saveGame();
 
 		}
 		if (!createWorld) {
 
-			if (prompt.getPromptText().equalsIgnoreCase("/debug")
-					&& EventManager.value == Keyboard.KEY_RETURN) {
+			if (prompt.getPromptText().equalsIgnoreCase("/debug") && EventManager.value == Keyboard.KEY_RETURN) {
 				createWorld = true;
 				prompt.setPromptText("_");
 				prompt.pointerPos = 0;
@@ -163,25 +150,27 @@ public class GameState extends State {
 
 		}
 
-		if (prompt.getPromptText().equalsIgnoreCase("/exit")
-				&& Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
+		if (prompt.getPromptText().equalsIgnoreCase("/exit") && Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
 			Game.closeProgram();
 		}
 
-		if (prompt.getPromptText().equalsIgnoreCase("/menu")
-				&& Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
+		if (prompt.getPromptText().equalsIgnoreCase("/menu") && Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
 			toMenu = true;
 		}
 
 	}
 
 	public void keyCommands() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-		toMenu = true;
+		String key = EventManager.getInput(false);
+		if (Integer.parseInt(key)==Keyboard.KEY_ESCAPE) {
+			toMenu = true;
+			System.out.println("yess.");
+			EventManager.value=0;
 		}
 		if (toMenu) {
-		State.setState(handler.getGame().getMenuState());
-		toMenu = false;
+			System.out.println("here");
+			State.setState(handler.getGame().getMenuState());
+//			toMenu = false;
 		}
 
 	}
@@ -194,6 +183,5 @@ public class GameState extends State {
 	public Clock getClock() {
 		return clock;
 	}
-	
-	
+
 }

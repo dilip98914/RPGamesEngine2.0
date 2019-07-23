@@ -58,12 +58,7 @@ public class Inventory {
 			if (currentIndex < 0) {
 				currentIndex = items.size() - 1;
 			}
-		}else if (EventManager.value == Keyboard.KEY_Q) {
-//			index--;
-//			if (index < 0) {
-//				index = items.size() - 1;
-//			}
-			System.out.println("caleedcsc");
+		}else if (key.contains("q")) {
 			throwEvent=true;
 			EventManager.value=0;
 		}  

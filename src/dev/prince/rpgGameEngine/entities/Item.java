@@ -27,6 +27,7 @@ public class Item extends Entity {
 	public void render() {
 		float xx= /*this.isItem?x:*/x-handler.getGameCamera().getxOffset();
 		float yy=y-handler.getGameCamera().getyOffset();
+//		Renderer.renderOutlineOfQuad(xx+bounds.getX(), yy+bounds.getY(), bounds.getWidth(), bounds.getHeight());
 		Renderer.renderSubImage(this.texture,xx,yy,width,height, imageData,(byte)1f);
 	}
 	public void render(float xx,float yy,float widtht,float heightt) {

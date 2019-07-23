@@ -95,6 +95,7 @@ public class EntityManager {
 				Pokemon currPokemon=(Pokemon)items.get(inventory.currentIndex).item;
 				if(p==currPokemon /*&& p.added*/){
 					pokemons.add(p);
+					p.setCoords(player.getX(), player.getY()+70);
 					p.added=false;
 //					magic line no-100 omgggggg.... just need a closer look how program behaving then look at code ...
 					p.interacted=false;

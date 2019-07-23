@@ -1,5 +1,6 @@
 package dev.prince.rpgGameEngine.entities;
 
+import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.opengl.Texture;
 
 import dev.prince.rpgGameEngine.Handler;
@@ -15,6 +16,7 @@ public class Pokemon extends Item{
 			String name,float x0,float y0) {
 		super(handler, x, y, width, height, name,null,null);
 		this.texture=Assets.pokemons;
+		this.bounds = new Rectangle(8,8,(int)width-16,(int)height-16);
 		this.imageData=new float[] {
 				x0/SHEET_WIDTH,y0/SHEET_HEIGHT,
 				(x0+1)/SHEET_WIDTH,(y0+1)/SHEET_HEIGHT,1
