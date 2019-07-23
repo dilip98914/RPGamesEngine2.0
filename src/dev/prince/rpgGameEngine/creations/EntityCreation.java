@@ -23,14 +23,44 @@ public class EntityCreation extends Creation {
 //	private int doorLength = 50;
 	private Entity e = null;
 
+	private boolean W_PRESSED,S_PRESSED,A_PRESSED,D_PRESSED;
+	private final int ALTER_CONST=5*2;
+	private int xc,yc; 
+	
 	public EntityCreation(Handler handler) {
 		super(handler);
 	}
 
 	public void tick() {
-
+		getEvents();
 	}
 
+	public void getEvents() {
+		W_PRESSED=S_PRESSED=A_PRESSED=D_PRESSED=false;
+		xc=yc=0;
+		String key = EventManager.getInput(true);
+		if (key.contains("w")) {
+			W_PRESSED=true;
+			yc=1;
+		} else if (key.contains("s")) {
+			S_PRESSED=true;
+			yc=-1;
+		}
+		else if (key.contains("a")) {
+			A_PRESSED=true;
+			xc=-1;
+		}
+		else if (key.contains("d")) {
+			D_PRESSED=true;
+			xc=1;
+		}
+	}
+	
+	private void alterSize(int xc0,int yc0) {
+		sWidth+=xc0*ALTER_CONST;
+		sHeight+=yc0*ALTER_CONST;
+	}
+	
 	public void render() {
 		mouseX = (int) ((handler.getGameCamera().getxOffset() + Mouse.getX()));
 		mouseY = (int) (((handler.getHeight() - Mouse.getY()) + handler.getGameCamera().getyOffset()));
@@ -83,17 +113,7 @@ public class EntityCreation extends Creation {
 			}
 		}
 		if (makeStatic) {
-			if (EventManager.value == Keyboard.KEY_W) {
-				sHeight += 5 * 2;
-
-			}
-			if (EventManager.value == Keyboard.KEY_S)
-				sHeight -= 5 * 2;
-			if (EventManager.value == Keyboard.KEY_D)
-				sWidth += 5 * 2;
-			if (EventManager.value == Keyboard.KEY_A)
-				sWidth -= 5 * 2;
-			EventManager.value = 0;
+			alterSize(xc, yc);
 		}
 		while (Mouse.next()) {// MOUSE.NEXT()
 			if (Mouse.getEventButtonState()) {

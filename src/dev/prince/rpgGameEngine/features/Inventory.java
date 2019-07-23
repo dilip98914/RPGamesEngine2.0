@@ -60,7 +60,7 @@ public class Inventory {
 			}
 		}else if (key.contains("q")) {
 			throwEvent=true;
-			EventManager.value=0;
+//			EventManager.value=0;
 		}  
 	}
 

@@ -169,7 +169,7 @@ public class GameState extends State {
 		}
 		if (toMenu) {
 			System.out.println("here");
-			State.setState(handler.getGame().getMenuState());
+			State.setState(combatState);
 //			toMenu = false;
 		}
 
