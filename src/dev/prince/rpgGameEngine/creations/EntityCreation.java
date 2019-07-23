@@ -35,6 +35,7 @@ public class EntityCreation extends Creation {
 	boolean inputCompleted = false;
 	boolean allowCommand = false;
 	String initialCommand = "";
+	boolean rightClick=false;
 
 	private void initCommandsInfo() {
 		Command.addCommand(new Command("/use staticentity"));
@@ -77,22 +78,16 @@ public class EntityCreation extends Creation {
 		} else if (key.contains("/")) {
 			inputCompleted = true;
 		}
-//		System.out.println("hehehe"+EventManager.letter);
+		
+		if(EventManager.mouse_button==1) {//right
+			rightClick=true;
+		}
 	}
 
 	private void alterSize(int xc0, int yc0) {
 		sWidth += xc0 * ALTER_CONST;
 		sHeight += yc0 * ALTER_CONST;
 	}
-
-//	public static <K, V> K getKey(Map<K, V> map, V value) {
-//		for (Map.Entry<K, V> entry : map.entrySet()) {
-//			if (value.equals(entry.getValue())) {
-//				return entry.getKey();
-//			}
-//		}
-//		return null;
-//	}
 
 	private Command checkForValidCommand(String input) {
 		String input0 = input.toLowerCase();
