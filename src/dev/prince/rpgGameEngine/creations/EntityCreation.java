@@ -31,7 +31,11 @@ public class EntityCreation extends Creation {
 	private final int ALTER_CONST = 5 * 2;
 	private int xc, yc;
 
-	
+	boolean move = false;
+	boolean inputCompleted = false;
+	boolean allowCommand = false;
+	String initialCommand = "";
+
 	private void initCommandsInfo() {
 		Command.addCommand(new Command("/use staticentity"));
 		Command.addCommand(new Command("/use npc"));
@@ -51,6 +55,7 @@ public class EntityCreation extends Creation {
 		mouseX = (int) ((handler.getGameCamera().getxOffset() + Mouse.getX()));
 		mouseY = (int) (((handler.getHeight() - Mouse.getY()) + handler.getGameCamera().getyOffset()));
 
+
 	}
 
 	public void getEvents() {
@@ -69,7 +74,10 @@ public class EntityCreation extends Creation {
 		} else if (key.contains("d")) {
 			D_PRESSED = true;
 			xc = 1;
+		} else if (key.contains("/")) {
+			inputCompleted = true;
 		}
+//		System.out.println("hehehe"+EventManager.letter);
 	}
 
 	private void alterSize(int xc0, int yc0) {
@@ -88,17 +96,24 @@ public class EntityCreation extends Creation {
 
 	private Command checkForValidCommand(String input) {
 		String input0 = input.toLowerCase();
-		for(int i=0;i<Command.commands.size();i++) {
-			Command cc=Command.commands.get(i);
-			if(input0.startsWith(cc.command)) {
-				cc.value=true;
+		for (int i = 0; i < Command.commands.size(); i++) {
+			Command cc = Command.commands.get(i);
+			if (input0.contains(cc.command)) {
+				cc.value = true;
+				System.out.println("command: " + cc.command);
+
+				if (!allowCommand) {
+					initialCommand = cc.command;
+					allowCommand = true;
+				}
+
 				return cc;
 			}
 		}
 		return null;
-		
+
 	}
-	
+
 	private String getPromptText() {
 		return handler.getGameState().prompt.getPromptText().toLowerCase();
 	}
@@ -106,12 +121,15 @@ public class EntityCreation extends Creation {
 	private int getPromptLength() {
 		return handler.getGameState().prompt.getPromptText().length();
 	}
-	
+
 	public void render() {
-		// ADD ENTITIES
-		// Move Entities
-		boolean move = false;
-		if (GameState.prompt.getPromptText().toLowerCase().startsWith("/move entity")) {
+		Command localCommand = checkForValidCommand(getPromptText());
+		if (allowCommand) {
+			renderIt(localCommand);
+		}
+		
+		
+		if (getPromptText().startsWith("/move entity")) {
 			move = true;
 		}
 
@@ -120,7 +138,7 @@ public class EntityCreation extends Creation {
 		int length = 50;
 
 //		checkForValidCommand(GameState.prompt.getPromptText());
-		
+
 		// PRE_STAGE********************************************************
 		if (GameState.prompt.getPromptText().toLowerCase().startsWith("/use door")) {// DOOR
 
@@ -141,11 +159,7 @@ public class EntityCreation extends Creation {
 					mouseY - handler.getGameCamera().getyOffset(), Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT,
 					Assets.characterDown[0], 0.4f);
 		}
-		
-		Command localCommand=checkForValidCommand(getPromptText());
-		if(localCommand!=null) {
-			if(getPromptLength()>18) makeStatic=renderIt(18,localCommand);else System.out.println("write full command");
-		}
+
 		if (makeStatic) {
 			alterSize(xc, yc);
 		}
@@ -377,17 +391,23 @@ public class EntityCreation extends Creation {
 
 	}
 
-	private boolean renderIt(int some,Command comm0) {
+	private boolean renderIt(Command comm0) {
 		for (int i = 0; i < Assets.names.size(); i++) {
-			if (getPromptText().substring(some, getPromptLength())
-					.equalsIgnoreCase(Assets.names.get(i))) {// IF NAME
-																// MATCHES
-				Renderer.setColor(1f, 1f, 1f, 0.5f);
-				Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
-						mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight,
-						Assets.staticEntities.get(i), 0.4f);
-				return true;
+			if (inputCompleted) {
+				String newCommand = getPromptText().replace(initialCommand, "");
+				newCommand = newCommand.replace("/", "");
+				newCommand=newCommand.trim();
+				System.out.println(newCommand+" herer");
+				if(newCommand.equalsIgnoreCase(Assets.names.get(i))){
+					System.out.println("reacing");
+					Renderer.setColor(1f, 1f, 1f, 0.5f);
+					Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
+							mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight, Assets.staticEntities.get(i),
+							0.4f);
+					return true;
+				}
 			}
+
 		}
 		return false;
 	}
