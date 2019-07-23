@@ -1,6 +1,8 @@
 package dev.prince.rpgGameEngine.creations;
 
-import org.lwjgl.input.Keyboard;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.lwjgl.input.Mouse;
 
 import dev.prince.rpgGameEngine.Handler;
@@ -9,6 +11,7 @@ import dev.prince.rpgGameEngine.entities.Entity;
 import dev.prince.rpgGameEngine.entities.creatures.Creature;
 import dev.prince.rpgGameEngine.entities.creatures.NPC;
 import dev.prince.rpgGameEngine.entities.statics.StaticEntity;
+import dev.prince.rpgGameEngine.features.Command;
 import dev.prince.rpgGameEngine.gfx.Assets;
 import dev.prince.rpgGameEngine.gfx.Renderer;
 import dev.prince.rpgGameEngine.inputs.EventManager;
@@ -19,51 +22,92 @@ import dev.prince.rpgGameEngine.worlds.loadAndSave.WorldSave;
 public class EntityCreation extends Creation {
 
 	private boolean place = false, hold = false;
+//	mouse x,mousey are world coordinated where mouse pointing;
 	private int mouseX, mouseY, sWidth = 50, sHeight = 50, staticEntityX, staticEntityY;
 //	private int doorLength = 50;
 	private Entity e = null;
 
-	private boolean W_PRESSED,S_PRESSED,A_PRESSED,D_PRESSED;
-	private final int ALTER_CONST=5*2;
-	private int xc,yc; 
+	private boolean W_PRESSED, S_PRESSED, A_PRESSED, D_PRESSED;
+	private final int ALTER_CONST = 5 * 2;
+	private int xc, yc;
+
 	
+	private void initCommandsInfo() {
+		Command.addCommand(new Command("/use staticentity"));
+		Command.addCommand(new Command("/use npc"));
+		Command.addCommand(new Command("/use door"));
+		Command.addCommand(new Command("/move entity"));
+		Command.addCommand(new Command("/delete entity"));
+
+	}
+
 	public EntityCreation(Handler handler) {
 		super(handler);
+		initCommandsInfo();
 	}
 
 	public void tick() {
 		getEvents();
+		mouseX = (int) ((handler.getGameCamera().getxOffset() + Mouse.getX()));
+		mouseY = (int) (((handler.getHeight() - Mouse.getY()) + handler.getGameCamera().getyOffset()));
+
 	}
 
 	public void getEvents() {
-		W_PRESSED=S_PRESSED=A_PRESSED=D_PRESSED=false;
-		xc=yc=0;
+		W_PRESSED = S_PRESSED = A_PRESSED = D_PRESSED = false;
+		xc = yc = 0;
 		String key = EventManager.getInput(true);
 		if (key.contains("w")) {
-			W_PRESSED=true;
-			yc=1;
+			W_PRESSED = true;
+			yc = 1;
 		} else if (key.contains("s")) {
-			S_PRESSED=true;
-			yc=-1;
-		}
-		else if (key.contains("a")) {
-			A_PRESSED=true;
-			xc=-1;
-		}
-		else if (key.contains("d")) {
-			D_PRESSED=true;
-			xc=1;
+			S_PRESSED = true;
+			yc = -1;
+		} else if (key.contains("a")) {
+			A_PRESSED = true;
+			xc = -1;
+		} else if (key.contains("d")) {
+			D_PRESSED = true;
+			xc = 1;
 		}
 	}
+
+	private void alterSize(int xc0, int yc0) {
+		sWidth += xc0 * ALTER_CONST;
+		sHeight += yc0 * ALTER_CONST;
+	}
+
+//	public static <K, V> K getKey(Map<K, V> map, V value) {
+//		for (Map.Entry<K, V> entry : map.entrySet()) {
+//			if (value.equals(entry.getValue())) {
+//				return entry.getKey();
+//			}
+//		}
+//		return null;
+//	}
+
+	private Command checkForValidCommand(String input) {
+		String input0 = input.toLowerCase();
+		for(int i=0;i<Command.commands.size();i++) {
+			Command cc=Command.commands.get(i);
+			if(input0.startsWith(cc.command)) {
+				cc.value=true;
+				return cc;
+			}
+		}
+		return null;
+		
+	}
 	
-	private void alterSize(int xc0,int yc0) {
-		sWidth+=xc0*ALTER_CONST;
-		sHeight+=yc0*ALTER_CONST;
+	private String getPromptText() {
+		return handler.getGameState().prompt.getPromptText().toLowerCase();
+	}
+
+	private int getPromptLength() {
+		return handler.getGameState().prompt.getPromptText().length();
 	}
 	
 	public void render() {
-		mouseX = (int) ((handler.getGameCamera().getxOffset() + Mouse.getX()));
-		mouseY = (int) (((handler.getHeight() - Mouse.getY()) + handler.getGameCamera().getyOffset()));
 		// ADD ENTITIES
 		// Move Entities
 		boolean move = false;
@@ -75,6 +119,8 @@ public class EntityCreation extends Creation {
 		boolean makeDoor = false, makeStatic = false;
 		int length = 50;
 
+//		checkForValidCommand(GameState.prompt.getPromptText());
+		
 		// PRE_STAGE********************************************************
 		if (GameState.prompt.getPromptText().toLowerCase().startsWith("/use door")) {// DOOR
 
@@ -95,22 +141,10 @@ public class EntityCreation extends Creation {
 					mouseY - handler.getGameCamera().getyOffset(), Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT,
 					Assets.characterDown[0], 0.4f);
 		}
-		if (GameState.prompt.getPromptText().toLowerCase().startsWith("/use staticentity")) {// STATIC ENTITY
-
-			if (GameState.prompt.getPromptText().length() > 18) {
-				for (int i = 0; i < Assets.names.size(); i++) {
-					if (GameState.prompt.getPromptText().substring(18, GameState.prompt.getPromptText().length())
-							.equalsIgnoreCase(Assets.names.get(i))) {// IF NAME
-																		// MATCHES
-
-						Renderer.setColor(1f, 1f, 1f, 0.5f);
-						Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
-								mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight,
-								Assets.staticEntities.get(i), 0.4f);
-						makeStatic = true;
-					}
-				}
-			}
+		
+		Command localCommand=checkForValidCommand(getPromptText());
+		if(localCommand!=null) {
+			if(getPromptLength()>18) makeStatic=renderIt(18,localCommand);else System.out.println("write full command");
 		}
 		if (makeStatic) {
 			alterSize(xc, yc);
@@ -341,6 +375,21 @@ public class EntityCreation extends Creation {
 			}
 		}
 
+	}
+
+	private boolean renderIt(int some,Command comm0) {
+		for (int i = 0; i < Assets.names.size(); i++) {
+			if (getPromptText().substring(some, getPromptLength())
+					.equalsIgnoreCase(Assets.names.get(i))) {// IF NAME
+																// MATCHES
+				Renderer.setColor(1f, 1f, 1f, 0.5f);
+				Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
+						mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight,
+						Assets.staticEntities.get(i), 0.4f);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
