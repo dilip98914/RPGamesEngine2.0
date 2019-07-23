@@ -70,7 +70,7 @@ public class EntityManager {
 		items.add(new InventoryItem(testItem2, 1));
 		items.add(new InventoryItem(testItem3, 1));
 		
-		
+		inventory.currentIndex=items.size()-1;
 	}
 
 //	public void collectPokemonByPlayer(Pokemon pp) {
@@ -92,17 +92,23 @@ public class EntityManager {
 		if (inventory.throwEvent && items.size()>0 ) {
 			for(int i=0;i<items.size();i++) {
 				Pokemon p=(Pokemon)items.get(i).item;
-				Pokemon currPokemon=(Pokemon)inventory.currentItem.item;
+				Pokemon currPokemon=(Pokemon)items.get(inventory.currentIndex).item;
 				if(p==currPokemon /*&& p.added*/){
 					pokemons.add(p);
 					p.added=false;
+//					magic line no-100 omgggggg.... just need a closer look how program behaving then look at code ...
+					p.interacted=false;
 //					System.out.println("i: "+i);
 					items.remove(i);
+					if(inventory.currentIndex>0) {
+						inventory.currentIndex--;					
+					}
+					inventory.throwEvent=false;
+					return;
 				}
 			}
 //			inventory.throwEvent=false;
 		}
-		inventory.throwEvent=false;
 
 //		if (player.getInventory().throwEvent && items.size()>0 ) {
 //			Pokemon currPokemon=(Pokemon)inventory.currentItem.item;

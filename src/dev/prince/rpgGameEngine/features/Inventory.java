@@ -26,8 +26,7 @@ public class Inventory {
 
 	public ArrayList<InventoryItem> items;
 
-	public InventoryItem currentItem;
-	public int index = 0;
+	public int currentIndex;
 	public boolean throwEvent=false;
 //	public boolean throwCurretItem=false;
 
@@ -39,8 +38,6 @@ public class Inventory {
 		x = handler.getWidth() / 2 - width / 2;
 		y = handler.getHeight() / 2 - height / 2;
 
-		index = 0;
-		
 		// DEFINE COLOR FLOAT VALUES
 		selectedColor = new float[] { 1, 0, 0, 0.8f };
 		items=new ArrayList<InventoryItem>();
@@ -51,15 +48,15 @@ public class Inventory {
 //			System.out.println(EventManager.getInput(true));
 		String key = EventManager.getInput(true);
 		if (key.contains("s")) {
-			index++;
+			currentIndex++;
 //			index=(index>=items.size())?0:1;
-			if (index >= items.size()) {
-				index = 0;
+			if (currentIndex >= items.size()) {
+				currentIndex = 0;
 			}
 		} else if (key.contains("w")) {
-			index--;
-			if (index < 0) {
-				index = items.size() - 1;
+			currentIndex--;
+			if (currentIndex < 0) {
+				currentIndex = items.size() - 1;
 			}
 		}else if (EventManager.value == Keyboard.KEY_Q) {
 //			index--;
@@ -75,13 +72,7 @@ public class Inventory {
 	
 	public void tick(Event[] events) {
 		getEvents();
-		if(items.size()>0 && index>=0) {
-//			System.out.println(index+" index");
-		}
-		currentItem = items.get(0);
-		System.out.println(currentItem.item.name+"curert ietm");
 
-//		this.inventoryIterator=handler.ge;
 
 		// Set Values
 //		visibleLength=0;
@@ -149,8 +140,8 @@ public class Inventory {
 		
 		for(int i=0;i<items.size();i++) {
 			InventoryItem item=items.get(i);
-			
-			if (item == currentItem) {
+			InventoryItem currItem=items.get(currentIndex);
+			if (item == currItem) {
 				Renderer.setColor(5.5f, 0.5f, 0.7f, 1f);
 			} else {
 				Renderer.setColor(0.5f, 0.5f, 0.7f, 0.6f);
