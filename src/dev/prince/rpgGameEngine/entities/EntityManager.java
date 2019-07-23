@@ -84,7 +84,11 @@ public class EntityManager {
 //	}
 
 	public void throwPokemonByPlayer() {
-
+		if(inventory.throwEvent) {
+			System.out.println("rhow event"+inventory.throwEvent);
+			
+		}
+//		System.out.println("size of items"+items.size());
 		if (inventory.throwEvent && items.size()>0 ) {
 			for(int i=0;i<items.size();i++) {
 				Pokemon p=(Pokemon)items.get(i).item;
@@ -92,11 +96,14 @@ public class EntityManager {
 				if(p==currPokemon /*&& p.added*/){
 					pokemons.add(p);
 					p.added=false;
-					items.remove(i--);
+//					System.out.println("i: "+i);
+					items.remove(i);
 				}
 			}
-			inventory.throwEvent=false;
+//			inventory.throwEvent=false;
 		}
+		inventory.throwEvent=false;
+
 //		if (player.getInventory().throwEvent && items.size()>0 ) {
 //			Pokemon currPokemon=(Pokemon)inventory.currentItem.item;
 //			inventory.addToPokemons(this,currPokemon);
@@ -149,8 +156,8 @@ public class EntityManager {
 	}
 
 	public void tick(int xStart, int xEnd, int yStart, int yEnd) {
-		System.out.println(" pokemons : "+pokemons.size());
-		System.out.println(" items : "+items.size());
+//		System.out.println(" pokemons : "+pokemons.size());
+//		System.out.println(" items : "+items.size());
 		
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);

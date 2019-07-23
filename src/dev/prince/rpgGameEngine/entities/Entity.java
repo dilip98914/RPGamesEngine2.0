@@ -29,7 +29,7 @@ public abstract class Entity {
 
 	public static ArrayList<String> classes;
 
-	protected String name;
+	public String name;
 	public boolean added=false;
 
 	public Entity(Handler handler, float x, float y, float width, float height, String name) {

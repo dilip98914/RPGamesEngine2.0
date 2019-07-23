@@ -66,6 +66,7 @@ public class Inventory {
 //			if (index < 0) {
 //				index = items.size() - 1;
 //			}
+			System.out.println("caleedcsc");
 			throwEvent=true;
 			EventManager.value=0;
 		}  
@@ -75,9 +76,10 @@ public class Inventory {
 	public void tick(Event[] events) {
 		getEvents();
 		if(items.size()>0 && index>=0) {
-			System.out.println(index+" index");
-			currentItem = items.get(index );
+//			System.out.println(index+" index");
 		}
+		currentItem = items.get(0);
+		System.out.println(currentItem.item.name+"curert ietm");
 
 //		this.inventoryIterator=handler.ge;
 
@@ -158,7 +160,9 @@ public class Inventory {
 
 			item.item.render(x + constX1, (y + yOff) + constY, 40, 40);
 			Renderer.renderString(x + constX2 / 2, (y + yOff) + constY, "-", Color.white, true);
-			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(item.quantity), Color.white, true);
+//			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(item.quantity), Color.white, true);
+			Renderer.renderString(x + constX2, (y + yOff) + constY, String.valueOf(i), Color.white, true);
+			
 			yOff += 40;
 		}
 
