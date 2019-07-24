@@ -62,7 +62,10 @@ public class EntityCreation extends Creation {
 	public void getEvents() {
 		W_PRESSED = S_PRESSED = A_PRESSED = D_PRESSED = false;
 		xc = yc = 0;
+		rightClick=false;
+		
 		String key = EventManager.getInput(true);
+		
 		if (key.contains("w")) {
 			W_PRESSED = true;
 			yc = 1;
@@ -81,6 +84,7 @@ public class EntityCreation extends Creation {
 		
 		if(EventManager.mouse_button==1) {//right
 			rightClick=true;
+			EventManager.mouse_button=0;
 		}
 	}
 
@@ -118,9 +122,12 @@ public class EntityCreation extends Creation {
 	}
 
 	public void render() {
+		boolean makeDoor = false, makeStatic = false;
+		int length = 50;
+		
 		Command localCommand = checkForValidCommand(getPromptText());
 		if (allowCommand) {
-			renderIt(localCommand);
+			renderIt(localCommand,rightClick);
 		}
 		
 		
@@ -129,8 +136,7 @@ public class EntityCreation extends Creation {
 		}
 
 		// ADD DOOR
-		boolean makeDoor = false, makeStatic = false;
-		int length = 50;
+	
 
 //		checkForValidCommand(GameState.prompt.getPromptText());
 
@@ -194,12 +200,12 @@ public class EntityCreation extends Creation {
 					}
 				}
 
-				if (makeStatic && Mouse.getEventButton() == 1) {
-					String tokens[] = GameState.prompt.getPromptText().split("\\s+");
-					handler.getWorld().getEntityManager().addEntity(
-							new StaticEntity(handler, mouseX, mouseY, sWidth, sHeight, tokens[tokens.length - 1]));
-					makeStatic = false;
-				}
+//				if (makeStatic && Mouse.getEventButton() == 1) {
+//					String tokens[] = GameState.prompt.getPromptText().split("\\s+");
+//					handler.getWorld().getEntityManager().addEntity(
+//							new StaticEntity(handler, mouseX, mouseY, sWidth, sHeight, tokens[tokens.length - 1]));
+//					makeStatic = false;
+//				}
 
 				// ///
 				// MOVE
@@ -386,20 +392,29 @@ public class EntityCreation extends Creation {
 
 	}
 
-	private boolean renderIt(Command comm0) {
+	private void addEntity(Entity e0) {
+		handler.getWorld().getEntityManager().addEntity(e0);
+	}
+	
+	
+	private boolean renderIt(Command comm0,boolean rightClicked0) {
 		for (int i = 0; i < Assets.names.size(); i++) {
 			if (inputCompleted) {
 				String newCommand = getPromptText().replace(initialCommand, "");
 				newCommand = newCommand.replace("/", "");
 				newCommand=newCommand.trim();
-				System.out.println(newCommand+" herer");
-				if(newCommand.equalsIgnoreCase(Assets.names.get(i))){
-					System.out.println("reacing");
-					Renderer.setColor(1f, 1f, 1f, 0.5f);
-					Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
-							mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight, Assets.staticEntities.get(i),
-							0.4f);
-					return true;
+				
+				if(rightClicked0) {
+					addEntity(new StaticEntity(handler, mouseX, mouseY, sWidth, sHeight,newCommand));
+				}else {
+					if(newCommand.equalsIgnoreCase(Assets.names.get(i))){
+						Renderer.setColor(1f, 1f, 1f, 0.5f);
+						Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
+								mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight, Assets.staticEntities.get(i),
+								0.4f);
+						return true;
+					}
+					
 				}
 			}
 
