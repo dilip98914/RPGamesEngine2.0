@@ -36,6 +36,7 @@ public class EntityCreation extends Creation {
 	boolean allowCommand = false;
 	String initialCommand = "";
 	boolean rightClick=false;
+	
 
 	private void initCommandsInfo() {
 		Command.addCommand(new Command("/use staticentity"));
@@ -121,13 +122,17 @@ public class EntityCreation extends Creation {
 		return handler.getGameState().prompt.getPromptText().length();
 	}
 
+	
+	
 	public void render() {
 		boolean makeDoor = false, makeStatic = false;
 		int length = 50;
 		
 		Command localCommand = checkForValidCommand(getPromptText());
+//	return localCOmmand as string and then process accordingly
+		
 		if (allowCommand) {
-			renderIt(localCommand,rightClick);
+			processStaticEntity(localCommand,rightClick);
 		}
 		
 		
@@ -397,7 +402,56 @@ public class EntityCreation extends Creation {
 	}
 	
 	
-	private boolean renderIt(Command comm0,boolean rightClicked0) {
+	private boolean processStaticEntity(Command comm0,boolean rightClicked0) {
+		for (int i = 0; i < Assets.names.size(); i++) {
+			if (inputCompleted) {
+				String newCommand = getPromptText().replace(initialCommand, "");
+				newCommand = newCommand.replace("/", "");
+				newCommand=newCommand.trim();
+				
+				if(rightClicked0) {
+					addEntity(new StaticEntity(handler, mouseX, mouseY, sWidth, sHeight,newCommand));
+					return true;
+				}else {
+					if(newCommand.equalsIgnoreCase(Assets.names.get(i))){
+						Renderer.setColor(1f, 1f, 1f, 0.5f);
+						alterSize(xc, yc);
+						Renderer.renderSubImage(Assets.statics, mouseX - handler.getGameCamera().getxOffset(),
+								mouseY - handler.getGameCamera().getyOffset(), sWidth, sHeight, Assets.staticEntities.get(i),
+								0.4f);
+						return true;
+					}
+					
+				}
+			}
+
+		}
+		return false;
+	}
+	
+	private boolean processNPC(Command comm0,boolean rightClicked0) {
+		for (int i = 0; i < Assets.names.size(); i++) {
+			if (inputCompleted) {
+				String newCommand = getPromptText().replace(initialCommand, "");
+				newCommand = newCommand.replace("/", "");
+				newCommand=newCommand.trim();
+				
+				if(rightClicked0) {
+					addEntity(new NPC(handler, mouseX, mouseY, "test"));
+					return true;
+				}else {
+					Renderer.setColor(1f, 1f, 1f, 0.5f);
+					Renderer.renderSubImage(Assets.NPCsheet, mouseX - handler.getGameCamera().getxOffset(),
+							mouseY - handler.getGameCamera().getyOffset(), Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT,
+							Assets.characterDown[0], 0.4f);
+					return true;
+				}
+			}
+
+		}
+		return false;
+	}
+	private boolean processDoor(Command comm0,boolean rightClicked0) {
 		for (int i = 0; i < Assets.names.size(); i++) {
 			if (inputCompleted) {
 				String newCommand = getPromptText().replace(initialCommand, "");
@@ -421,5 +475,7 @@ public class EntityCreation extends Creation {
 		}
 		return false;
 	}
+	
+	
 
 }
